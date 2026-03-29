@@ -85,6 +85,17 @@ const sections = {
             </div>
             <div class="project-item">
                 <div class="project-item-header">
+                    <a href="https://github.com/tirthpatel90/DevOps-Utility-" target="_blank" class="highlight project-name">DevOps Utility Hub</a>
+                    <span class="project-timeline">March 2026</span>
+                </div>
+                <ul class="project-desc">
+                    <li>Developed a client-side DevOps toolkit with multiple utilities for configuration validation, secrets encoding, and infrastructure helpers.</li>
+                    <li>Hosted the application on AWS S3 hosting, demonstrating cloud deployment and lightweight serverless delivery of developer tools.</li>
+                </ul>
+                <div class="project-stack"><span class="label">Stack:</span> JavaScript, HTML/CSS, AWS S3</div>
+            </div>
+            <div class="project-item">
+                <div class="project-item-header">
                     <a href="https://github.com/tirthpatel90/NAVIQ" target="_blank" class="highlight project-name">NAVIQ – Career Guidance Platform</a>
                     <span class="project-timeline">Dec 2025 – Jan 2026</span>
                 </div>

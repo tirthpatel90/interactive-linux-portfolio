@@ -278,42 +278,6 @@ nav a:hover {
     color: var(--success-color);
 }
 
-/* About Section PFP Styling */
-.about-container {
-    display: flex;
-    gap: 25px;
-    align-items: flex-start;
-}
-
-.about-pfp {
-    flex-shrink: 0;
-}
-
-.about-pfp img {
-    width: 140px;
-    height: 180px;
-    border-radius: 12px;
-    border: 2px solid var(--accent-color);
-    box-shadow: 0 0 20px rgba(88, 166, 255, 0.3);
-    object-fit: cover;
-    object-position: center; /* Center the image in the frame */
-    transition: transform 0.3s ease, border-color 0.3s ease;
-    background: var(--terminal-bg); /* Placeholder bg while loading */
-}
-
-.about-pfp img:hover {
-    transform: scale(1.02);
-    border-color: var(--success-color);
-}
-
-@media (max-width: 480px) {
-    .about-container {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-}
-
 .tree-container {
     display: flex;
     gap: 40px;
@@ -823,4 +787,4 @@ body.booted .social-links {
         font-size: 1.3rem;
     }
 }
-
+
