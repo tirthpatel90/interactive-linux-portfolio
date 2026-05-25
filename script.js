@@ -1,3 +1,7 @@
+// Sync and apply active theme instantly during loading to prevent visual flashes
+const savedTheme = localStorage.getItem('tirth-portfolio-theme') || 'dracula';
+document.body.classList.add(`theme-${savedTheme}`);
+
 const termInput = document.getElementById('terminal-input');
 const ghostText = document.getElementById('ghost-text');
 const termHistory = document.getElementById('terminal-history');
@@ -161,10 +165,95 @@ const sections = {
                 <div id="form-status" class="form-status"></div>
             </form>
         `
+    },
+    files: {
+        title: "File Explorer",
+        content: `
+            <div class="file-grid">
+                <div class="file-item" data-action="about">
+                    <i class="fas fa-folder file-icon folder"></i>
+                    <span class="file-name">about_me</span>
+                </div>
+                <div class="file-item" data-action="skills">
+                    <i class="fas fa-folder file-icon folder"></i>
+                    <span class="file-name">skills</span>
+                </div>
+                <div class="file-item" data-action="projects">
+                    <i class="fas fa-folder file-icon folder"></i>
+                    <span class="file-name">projects</span>
+                </div>
+                <div class="file-item" data-action="experience">
+                    <i class="fas fa-folder file-icon folder"></i>
+                    <span class="file-name">experience</span>
+                </div>
+                <div class="file-item" data-action="connect">
+                    <i class="fas fa-folder file-icon folder"></i>
+                    <span class="file-name">contact</span>
+                </div>
+                <div class="file-item" data-action="resume">
+                    <i class="fas fa-file-pdf file-icon pdf"></i>
+                    <span class="file-name">resume.pdf</span>
+                </div>
+            </div>
+        `
+    },
+    theme: {
+        title: "Theme Selector",
+        content: `
+            <p style="margin-bottom: 15px; font-size: 0.85rem; opacity: 0.8;">Select a theme preset to restyle the environment:</p>
+            <div class="theme-picker-grid">
+                <div class="theme-picker-card" data-theme="dracula" id="theme-card-dracula">
+                    <span class="theme-picker-name">Dracula Dark</span>
+                    <div class="theme-picker-preview">
+                        <span class="theme-picker-dot" style="background: #0b0e14;"></span>
+                        <span class="theme-picker-dot" style="background: #58a6ff;"></span>
+                        <span class="theme-picker-dot" style="background: #3fb950;"></span>
+                        <span class="theme-picker-dot" style="background: #bc8cff;"></span>
+                    </div>
+                </div>
+                <div class="theme-picker-card" data-theme="matrix" id="theme-card-matrix">
+                    <span class="theme-picker-name">Matrix Green</span>
+                    <div class="theme-picker-preview">
+                        <span class="theme-picker-dot" style="background: #020502;"></span>
+                        <span class="theme-picker-dot" style="background: #00ff00;"></span>
+                        <span class="theme-picker-dot" style="background: #39ff14;"></span>
+                        <span class="theme-picker-dot" style="background: #00ff66;"></span>
+                    </div>
+                </div>
+                <div class="theme-picker-card" data-theme="github" id="theme-card-github">
+                    <span class="theme-picker-name">GitHub Dark</span>
+                    <div class="theme-picker-preview">
+                        <span class="theme-picker-dot" style="background: #0d1117;"></span>
+                        <span class="theme-picker-dot" style="background: #58a6ff;"></span>
+                        <span class="theme-picker-dot" style="background: #58a6ff;"></span>
+                        <span class="theme-picker-dot" style="background: #8b949e;"></span>
+                    </div>
+                </div>
+                <div class="theme-picker-card" data-theme="tokyonight" id="theme-card-tokyonight">
+                    <span class="theme-picker-name">Tokyo Night</span>
+                    <div class="theme-picker-preview">
+                        <span class="theme-picker-dot" style="background: #1a1b26;"></span>
+                        <span class="theme-picker-dot" style="background: #7aa2f7;"></span>
+                        <span class="theme-picker-dot" style="background: #9ece6a;"></span>
+                        <span class="theme-picker-dot" style="background: #bb9af7;"></span>
+                    </div>
+                </div>
+                <div class="theme-picker-card" data-theme="midnight" id="theme-card-midnight">
+                    <span class="theme-picker-name">Midnight Black</span>
+                    <div class="theme-picker-preview">
+                        <span class="theme-picker-dot" style="background: #000000;"></span>
+                        <span class="theme-picker-dot" style="background: #58a6ff;"></span>
+                        <span class="theme-picker-dot" style="background: #3fb950;"></span>
+                        <span class="theme-picker-dot" style="background: #bc8cff;"></span>
+                    </div>
+                </div>
+            </div>
+            <p style="margin-top: 15px; font-size: 0.75rem; opacity: 0.5; font-family: var(--font-mono);">Or run in terminal: theme [dracula|matrix|github|tokyonight|midnight]</p>
+        `
     }
 };
 
-const commands = ['whoami', 'skills', 'projects', 'experience', 'connect', 'resume', 'help', 'clear', 'ls'];
+const commands = ['whoami', 'skills', 'projects', 'experience', 'connect', 'resume', 'help', 'clear', 'ls', 'files', 'theme'];
 
 // Input Handling
 // Initial cursor state
@@ -172,7 +261,15 @@ updateCursor();
 
 
 termInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Tab') {
+        e.preventDefault();
+        const val = termInput.value.toLowerCase();
+        const match = commands.find(c => c.startsWith(val));
+        if (match) {
+            termInput.value = match;
+            updateCursor();
+        }
+    } else if (e.key === 'Enter') {
         const cmd = termInput.value.toLowerCase() || ghostText.innerText;
         
         if (cmd && cmd.trim()) {
@@ -227,13 +324,61 @@ termInput.addEventListener('input', updateCursor);
 termInput.addEventListener('keydown', updateCursor);
 
 
-function executeCommand(cmd) {
-    if (!cmd) return;
+
+
+function getActiveThemeName() {
+    if (document.body.classList.contains('theme-matrix')) return 'Matrix-Green';
+    if (document.body.classList.contains('theme-github')) return 'GitHub-Dark';
+    if (document.body.classList.contains('theme-tokyonight')) return 'Tokyo-Night';
+    if (document.body.classList.contains('theme-midnight')) return 'Midnight-Black';
+    return 'Dracula-Dark (Default)';
+}
+
+function setTheme(name) {
+    const validThemes = ['dracula', 'matrix', 'github', 'tokyonight', 'midnight'];
+    if (!validThemes.includes(name)) return false;
+
+    validThemes.forEach(t => document.body.classList.remove(`theme-${t}`));
+    document.body.classList.add(`theme-${name}`);
+    localStorage.setItem('tirth-portfolio-theme', name);
+
+    // Sync active states on theme card elements if they exist
+    const cards = document.querySelectorAll('.theme-picker-card');
+    cards.forEach(c => {
+        if (c.dataset.theme === name) {
+            c.classList.add('active');
+        } else {
+            c.classList.remove('active');
+        }
+    });
+
+    // Also sync the dropdown active item if present
+    const dropdownItems = document.querySelectorAll('.theme-dropdown-item');
+    dropdownItems.forEach(item => {
+        if (item.dataset.theme === name) {
+            item.style.fontWeight = 'bold';
+            item.style.color = 'var(--accent-color)';
+        } else {
+            item.style.fontWeight = 'normal';
+            item.style.color = '';
+        }
+    });
+
+    return true;
+}
+
+function executeCommand(input) {
+    if (!input) return;
 
     // Add to history
     const log = document.createElement('div');
-    log.innerHTML = `<span class="user">tirth@linux</span>:<span class="path">~</span>$ <span class="highlight">${cmd}</span>`;
+    log.innerHTML = `<span class="user">tirth@linux</span>:<span class="path">~</span>$ <span class="highlight">${input}</span>`;
     termHistory.appendChild(log);
+
+    // Split parameters for parsed shell execution
+    const parts = input.trim().split(/\s+/);
+    const cmd = parts[0].toLowerCase();
+    const args = parts.slice(1);
 
     if (sections[cmd]) {
         openSection(cmd);
@@ -245,6 +390,23 @@ function executeCommand(cmd) {
         window.open('Resume.pdf', '_blank');
     } else if (cmd === 'clear') {
         termHistory.innerHTML = '';
+    } else if (cmd === 'files') {
+        openSection('files');
+    } else if (cmd === 'theme') {
+        if (args.length === 0) {
+            openSection('theme');
+        } else {
+            const themeName = args[0].toLowerCase();
+            const success = setTheme(themeName);
+            const output = document.createElement('div');
+            output.className = 'output';
+            if (success) {
+                output.innerHTML = `<span class="highlight">✓ Theme environment successfully updated to: ${themeName}</span>`;
+            } else {
+                output.innerHTML = `<span style="color: #ff5f56;">✗ Unknown theme: "${themeName}". Available themes: dracula, matrix, github, tokyonight, midnight</span>`;
+            }
+            termHistory.appendChild(output);
+        }
     } else if (cmd === 'help' || cmd === 'ls') {
         const output = document.createElement('div');
         output.className = 'output';
@@ -311,13 +473,76 @@ function openSection(slug) {
 
     if (slug === 'connect') {
         initConnectForm();
+    } else if (slug === 'files') {
+        initFileTree(win);
+    } else if (slug === 'theme') {
+        initThemeSelector(win);
     }
+}
+
+function initFileTree(win) {
+    const items = win.querySelectorAll('.file-item');
+    items.forEach(item => {
+        const action = item.dataset.action;
+        const openAction = () => {
+            if (action === 'resume') {
+                window.open('Resume.pdf', '_blank');
+            } else {
+                const slugMap = {
+                    'about': 'whoami',
+                    'skills': 'skills',
+                    'projects': 'projects',
+                    'experience': 'experience',
+                    'connect': 'connect'
+                };
+                openSection(slugMap[action] || action);
+            }
+        };
+        
+        // Double click for desktop
+        item.addEventListener('dblclick', openAction);
+        
+        // Single tap for mobile / touch screens
+        let lastTap = 0;
+        item.addEventListener('click', (e) => {
+            const now = Date.now();
+            const DOUBLE_PRESS_DELAY = 300;
+            if (now - lastTap < DOUBLE_PRESS_DELAY || window.innerWidth <= 768) {
+                openAction();
+            }
+            lastTap = now;
+            
+            // Highlight item
+            items.forEach(i => i.style.background = '');
+            item.style.background = 'rgba(255, 255, 255, 0.05)';
+            e.stopPropagation();
+        });
+    });
+    
+    // Clicking window body deselects items
+    win.querySelector('.terminal-body').addEventListener('click', () => {
+        items.forEach(i => i.style.background = '');
+    });
+}
+
+function initThemeSelector(win) {
+    const cards = win.querySelectorAll('.theme-picker-card');
+    const currentTheme = localStorage.getItem('tirth-portfolio-theme') || 'dracula';
+    
+    // Set initial active card
+    const currentCard = win.querySelector(`#theme-card-${currentTheme}`);
+    if (currentCard) currentCard.classList.add('active');
+
+    cards.forEach(card => {
+        card.addEventListener('click', () => {
+            const themeName = card.dataset.theme;
+            setTheme(themeName);
+        });
+    });
 }
 
 function initConnectForm() {
     const form = document.getElementById('connect-form');
-    const status = document.getElementById('form-status');
-
     if (!form) return;
 
     form.onsubmit = async (e) => {
@@ -367,7 +592,10 @@ function initConnectForm() {
 }
 
 function closeWindow(slug) {
-    document.getElementById(`window-${slug}`).remove();
+    const win = document.getElementById(`window-${slug}`);
+    if (win) {
+        win.remove();
+    }
 }
 
 function maximizeWindow(slug) {
@@ -406,19 +634,17 @@ function makeDraggable(el) {
     header.onmousedown = dragMouseDown;
 
     function dragMouseDown(e) {
-        if (e.target.closest('.header-buttons')) return; // Don't drag if clicking buttons
+        if (e.target.closest('.header-buttons')) return;
 
         e.preventDefault();
         pos3 = e.clientX;
         pos4 = e.clientY;
 
-        // Disable transition while dragging for performance and to prevent fighting
         el.style.transition = 'none';
 
         document.onmouseup = closeDragElement;
         document.onmousemove = elementDrag;
 
-        // Touch events
         document.ontouchend = closeDragElement;
         document.ontouchmove = elementDrag;
 
@@ -436,7 +662,6 @@ function makeDraggable(el) {
         pos3 = clientX;
         pos4 = clientY;
 
-        // Only drag if not maximized
         if (!el.classList.contains('maximized')) {
             el.style.top = (el.offsetTop - pos2) + "px";
             el.style.left = (el.offsetLeft - pos1) + "px";
@@ -449,13 +674,41 @@ function makeDraggable(el) {
         document.ontouchend = null;
         document.ontouchmove = null;
 
-        // Re-enable transition after drag
         el.style.transition = '';
     }
 }
 
 // Initial focus
-document.addEventListener('DOMContentLoaded', runBootSequence);
+document.addEventListener('DOMContentLoaded', () => {
+    runBootSequence();
+    
+    // Floating Quick Theme Selector Event Bindings
+    const quickBtn = document.getElementById('theme-quick-btn');
+    const quickDropdown = document.getElementById('theme-quick-dropdown');
+    
+    if (quickBtn && quickDropdown) {
+        quickBtn.addEventListener('click', (e) => {
+            quickDropdown.classList.toggle('show');
+            e.stopPropagation();
+        });
+        
+        const dropdownItems = quickDropdown.querySelectorAll('.theme-dropdown-item');
+        dropdownItems.forEach(item => {
+            item.addEventListener('click', (e) => {
+                const themeName = item.dataset.theme;
+                setTheme(themeName);
+                quickDropdown.classList.remove('show');
+                e.stopPropagation();
+            });
+        });
+        
+        document.addEventListener('click', (e) => {
+            if (!quickBtn.contains(e.target) && !quickDropdown.contains(e.target)) {
+                quickDropdown.classList.remove('show');
+            }
+        });
+    }
+});
 
 async function runBootSequence() {
     const bootScreen = document.getElementById('boot-screen');
@@ -478,7 +731,6 @@ async function runBootSequence() {
     bootScreen.classList.add('fade-out');
     document.body.classList.add('booted');
 
-    // Focus terminal after sequence
     setTimeout(() => {
         termInput.focus();
         updateCursor();
@@ -486,9 +738,10 @@ async function runBootSequence() {
 }
 
 document.addEventListener('click', (e) => {
-    // Only focus terminal if clicking on the background/desktop or non-interactive elements
     const interactiveTags = ['INPUT', 'TEXTAREA', 'BUTTON', 'A'];
-    if (!interactiveTags.includes(e.target.tagName)) {
+    // Avoid stealing focus if clicking on quick theme selector button or items
+    const themeSelector = e.target.closest('#theme-quick-btn') || e.target.closest('#theme-quick-dropdown');
+    if (!interactiveTags.includes(e.target.tagName) && !themeSelector) {
         termInput.focus();
     }
 });
