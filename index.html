@@ -30,6 +30,7 @@
             <a href="#" onclick="openSection('projects')">/ projects</a>
             <a href="#" onclick="openSection('experience')">/ experience</a>
             <a href="#" onclick="openSection('connect')">/ connect</a>
+            <a href="#" onclick="openSection('files')">/ files</a>
             <a href="Resume.pdf" target="_blank">/ resume</a>
         </nav>
     </header>
@@ -71,6 +72,19 @@
                 class="fab fa-linkedin"></i> linkedin</a>
         <a href="mailto:tirthpatel5393@gmail.com" class="social-btn"><i class="fas fa-envelope"></i> email</a>
     </section>
+
+    <!-- Floating Theme Picker Widget -->
+    <div class="theme-quick-btn" id="theme-quick-btn">
+        <i class="fas fa-cog"></i>
+        <span class="tooltip">Change Theme</span>
+    </div>
+    <div class="theme-quick-dropdown" id="theme-quick-dropdown">
+        <div class="theme-dropdown-item" data-theme="dracula"><span class="dot dracula"></span> Dracula</div>
+        <div class="theme-dropdown-item" data-theme="matrix"><span class="dot matrix"></span> Matrix</div>
+        <div class="theme-dropdown-item" data-theme="github"><span class="dot github"></span> GitHub Dark</div>
+        <div class="theme-dropdown-item" data-theme="tokyonight"><span class="dot tokyonight"></span> Tokyo Night</div>
+        <div class="theme-dropdown-item" data-theme="midnight"><span class="dot midnight"></span> Midnight Black</div>
+    </div>
 
     <script src="script.js"></script>
 </body>
