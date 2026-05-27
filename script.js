@@ -253,18 +253,41 @@ const sections = {
     }
 };
 
-const commands = ['whoami', 'skills', 'projects', 'experience', 'connect', 'resume', 'help', 'clear', 'ls', 'files', 'theme'];
+// Docker Sandbox State variables
+let dockerState = {
+    active: false,
+    user: 'root',
+    host: 'centos-sandbox',
+    path: '/'
+};
+
+const containerCommands = ['ls', 'yum', 'exit', 'help', 'clear', 'whoami'];
+const centosFiles = ['bin/', 'etc/', 'home/', 'var/', 'usr/', 'root/', 'opt/', 'tmp/'];
+const commands = ['whoami', 'skills', 'projects', 'experience', 'connect', 'resume', 'help', 'clear', 'ls', 'files', 'theme', 'docker'];
 
 // Input Handling
 // Initial cursor state
 updateCursor();
 
-
 termInput.addEventListener('keydown', (e) => {
     if (e.key === 'Tab') {
         e.preventDefault();
         const val = termInput.value.toLowerCase();
-        const match = commands.find(c => c.startsWith(val));
+        
+        // Intercept docker subcommands auto-completion
+        if (val.startsWith('docker ') && !dockerState.active) {
+            const subcommands = ['ps', 'images', 'run -it centos', 'run -it ubuntu'];
+            const typedSub = val.slice(7);
+            const matchSub = subcommands.find(sc => sc.startsWith(typedSub));
+            if (matchSub) {
+                termInput.value = `docker ${matchSub}`;
+                updateCursor();
+            }
+            return;
+        }
+
+        const activeList = dockerState.active ? containerCommands : commands;
+        const match = activeList.find(c => c.startsWith(val));
         if (match) {
             termInput.value = match;
             updateCursor();
@@ -310,7 +333,22 @@ termInput.addEventListener('keydown', (e) => {
 // Update ghost text for blinking cursor
 function updateCursor() {
     const val = termInput.value;
-    const match = commands.find(c => c.startsWith(val.toLowerCase()));
+    const activeList = dockerState.active ? containerCommands : commands;
+
+    // Check if typing a docker subcommand
+    if (val.toLowerCase().startsWith('docker ') && !dockerState.active) {
+        const subcommands = ['ps', 'images', 'run -it centos', 'run -it ubuntu'];
+        const typedSub = val.toLowerCase().slice(7);
+        const match = subcommands.find(sc => sc.startsWith(typedSub));
+        if (match) {
+            ghostText.innerHTML = `${val.replace(/ /g, '&nbsp;')}<span class="cursor-block"></span><span class="suggestion">${match.slice(typedSub.length)}</span>`;
+        } else {
+            ghostText.innerHTML = `${val.replace(/ /g, '&nbsp;')}<span class="cursor-block"></span>`;
+        }
+        return;
+    }
+
+    const match = activeList.find(c => c.startsWith(val.toLowerCase()));
 
     if (val && match) {
         // match.slice(val.length) is the suggestion
@@ -322,6 +360,17 @@ function updateCursor() {
 
 termInput.addEventListener('input', updateCursor);
 termInput.addEventListener('keydown', updateCursor);
+
+function updatePromptPrefix() {
+    const prefix = document.getElementById('terminal-prompt-prefix');
+    if (!prefix) return;
+
+    if (dockerState.active) {
+        prefix.innerHTML = `<span class="docker-root-prompt">[${dockerState.user}@${dockerState.host} ${dockerState.path}]#</span> `;
+    } else {
+        prefix.innerHTML = `<span class="user">tirth@linux</span>:<span class="path">~</span>$ `;
+    }
+}
 
 
 
@@ -372,7 +421,11 @@ function executeCommand(input) {
 
     // Add to history
     const log = document.createElement('div');
-    log.innerHTML = `<span class="user">tirth@linux</span>:<span class="path">~</span>$ <span class="highlight">${input}</span>`;
+    if (dockerState.active) {
+        log.innerHTML = `<span class="docker-root-prompt">[${dockerState.user}@${dockerState.host} ${dockerState.path}]#</span> <span class="highlight">${input}</span>`;
+    } else {
+        log.innerHTML = `<span class="user">tirth@linux</span>:<span class="path">~</span>$ <span class="highlight">${input}</span>`;
+    }
     termHistory.appendChild(log);
 
     // Split parameters for parsed shell execution
@@ -380,6 +433,16 @@ function executeCommand(input) {
     const cmd = parts[0].toLowerCase();
     const args = parts.slice(1);
 
+    // DOCKER CONTAINER ACTIVE CLI ROUTING
+    if (dockerState.active) {
+        handleDockerCommand(cmd, args);
+        // Auto-scroll
+        const body = document.getElementById('main-terminal-body');
+        body.scrollTop = body.scrollHeight;
+        return;
+    }
+
+    // REGULAR PORTFOLIO COMMANDS
     if (sections[cmd]) {
         openSection(cmd);
     } else if (cmd === 'resume') {
@@ -407,6 +470,8 @@ function executeCommand(input) {
             }
             termHistory.appendChild(output);
         }
+    } else if (cmd === 'docker') {
+        handleBaseDockerCommand(args);
     } else if (cmd === 'help' || cmd === 'ls') {
         const output = document.createElement('div');
         output.className = 'output';
@@ -422,6 +487,140 @@ function executeCommand(input) {
     // Auto-scroll
     const body = document.getElementById('main-terminal-body');
     body.scrollTop = body.scrollHeight;
+}
+
+function handleBaseDockerCommand(args) {
+    const output = document.createElement('div');
+    output.className = 'output';
+
+    if (args.length === 0) {
+        output.innerHTML = `
+<pre style="margin: 0; font-family: var(--font-mono); color: #8b949e; line-height: 1.45;">
+Usage: docker [run|ps|images]
+Commands:
+  docker ps                  List running containers
+  docker images              List locally cached container images
+  docker run -it centos      Spin up an isolated CentOS container sandbox
+  docker run -it ubuntu      Spin up an isolated Ubuntu container sandbox
+</pre>
+`;
+        termHistory.appendChild(output);
+        return;
+    }
+
+    const sub = args[0].toLowerCase();
+    if (sub === 'ps') {
+        output.innerHTML = `<span style="font-family: var(--font-mono);">CONTAINER ID   IMAGE      COMMAND                  CREATED          STATUS          PORTS</span>`;
+        termHistory.appendChild(output);
+    } else if (sub === 'images') {
+        output.innerHTML = `
+<pre style="margin: 0; font-family: var(--font-mono); color: #8b949e;">
+REPOSITORY   TAG       IMAGE ID       SIZE
+centos       latest    5d0da3dc9764   231MB
+ubuntu       latest    ba6250787135   72.8MB
+nginx        alpine    f8f8f2e2124a   23.5MB
+</pre>
+`;
+        termHistory.appendChild(output);
+    } else if (sub === 'run') {
+        if (args[1] === '-it' && (args[2] === 'centos' || args[2] === 'ubuntu')) {
+            const OS = args[2];
+            dockerState.active = true;
+            dockerState.user = 'root';
+            dockerState.host = `${OS}-container`;
+            dockerState.path = '/';
+            
+            output.innerHTML = `<span class="highlight">Unable to find image '${OS}:latest' locally...</span><br>
+latest: Pulling from library/${OS}<br>
+Digest: sha256:7f950a3c9764a85fa62ba62b...<br>
+Status: Downloaded newer image for ${OS}:latest<br><br>
+<span class="highlight">[Booting virtual container...]</span><br>
+- Mounting root file systems... (OK)<br>
+- Configuring loopback device & bridge eth0... (OK)<br>
+- Restricting sandbox namespaces... (OK)<br>
+- Granting superuser root privileges... (OK)<br><br>
+Welcome to the isolated ${OS.toUpperCase()} Docker Sandbox!<br>
+Type 'yum' (CentOS) or 'apt' (Ubuntu) for packages, or 'exit' to terminate.`;
+            
+            termHistory.appendChild(output);
+            
+            // Clear history for clean container environment
+            setTimeout(() => {
+                termHistory.innerHTML = '';
+                const containerWelcome = document.createElement('div');
+                containerWelcome.className = 'output';
+                containerWelcome.innerHTML = `Welcome to the isolated ${OS.toUpperCase()} Docker Sandbox!<br>Type 'yum' (CentOS) or 'apt' (Ubuntu) for packages, or 'exit' to terminate.`;
+                termHistory.appendChild(containerWelcome);
+                updatePromptPrefix();
+                updateCursor();
+            }, 1800);
+        } else {
+            output.innerHTML = `<span style="color: #ff5f56;">✗ Invalid options. Usage: docker run -it [centos|ubuntu]</span>`;
+            termHistory.appendChild(output);
+        }
+    } else {
+        output.innerHTML = `<span style="color: #ff5f56;">✗ Unknown docker command: "${sub}". Type 'docker' for options.</span>`;
+        termHistory.appendChild(output);
+    }
+}
+
+function handleDockerCommand(cmd, args) {
+    const output = document.createElement('div');
+    output.className = 'output';
+
+    if (cmd === 'exit') {
+        dockerState.active = false;
+        output.innerHTML = `exit<br>[Container terminated successfully. Resources released.]`;
+        termHistory.appendChild(output);
+        updatePromptPrefix();
+        updateCursor();
+    } else if (cmd === 'clear') {
+        termHistory.innerHTML = '';
+    } else if (cmd === 'whoami') {
+        output.innerHTML = 'root';
+        termHistory.appendChild(output);
+    } else if (cmd === 'ls') {
+        output.innerHTML = `<span style="color: var(--accent-color); font-weight: bold;">${centosFiles.join('  ')}</span>`;
+        termHistory.appendChild(output);
+    } else if (cmd === 'yum' || cmd === 'apt') {
+        if (args.length > 0 && args[0] === 'install') {
+            const pkg = args[1] || 'nginx';
+            output.innerHTML = `
+Loaded plugins: fastestmirror, ovl<br>
+Determining fastest mirrors<br>
+Resolving Dependencies<br>
+--> Running transaction check<br>
+---> Package ${pkg}.x86_64 0:1.20.1-1 will be installed<br>
+--> Finished Dependency Resolution<br><br>
+Total download size: 582 k<br>
+Installed size: 1.6 M<br>
+Downloading packages:<br>
+${pkg}-1.20.1-1.rpm          [====================>] 100% (582 KB/s)<br><br>
+Running transaction check<br>
+Running transaction test<br>
+Transaction test succeeded<br>
+Running transaction<br>
+  Installing : ${pkg}-1.20.1-1                                      1/1<br>
+  Verifying  : ${pkg}-1.20.1-1                                      1/1<br><br>
+<span class="highlight">Installed:</span><br>
+  ${pkg}.x86_64 0:1.20.1-1<br><br>
+<span class="highlight">Complete!</span>
+`;
+            termHistory.appendChild(output);
+        } else {
+            output.innerHTML = `
+Usage: ${cmd} install [package_name]<br>
+Try running: ${cmd} install nginx
+`;
+            termHistory.appendChild(output);
+        }
+    } else if (cmd === 'help') {
+        output.innerHTML = `Isolated Container Shell commands: <br>${containerCommands.join(', ')}`;
+        termHistory.appendChild(output);
+    } else {
+        output.innerHTML = `bash: ${cmd}: command not found. Type 'help' for options.`;
+        termHistory.appendChild(output);
+    }
 }
 
 function openSection(slug) {
@@ -598,23 +797,72 @@ function closeWindow(slug) {
     }
 }
 
-function maximizeWindow(slug) {
-    const win = document.getElementById(`window-${slug}`);
-    win.classList.toggle('maximized');
-}
-
-function minimizeWindow(slug) {
-    const win = document.getElementById(`window-${slug}`);
-    if (win.classList.contains('maximized')) {
-        win.classList.remove('maximized');
-    } else {
-        win.classList.toggle('collapsed');
+function maximizeWindow(idOrSlug) {
+    const win = document.getElementById(`window-${idOrSlug}`) || document.getElementById(idOrSlug);
+    if (win) {
+        win.classList.toggle('maximized');
     }
 }
 
-function focusWindow(slug) {
-    const win = document.getElementById(`window-${slug}`);
+function minimizeWindow(idOrSlug) {
+    const win = document.getElementById(`window-${idOrSlug}`) || document.getElementById(idOrSlug);
+    if (win) {
+        if (win.classList.contains('maximized')) {
+            win.classList.remove('maximized');
+        } else if (win.id !== 'main-terminal') {
+            win.classList.toggle('collapsed');
+        }
+    }
+}
+
+function focusWindow(idOrSlug) {
+    const win = document.getElementById(`window-${idOrSlug}`) || document.getElementById(idOrSlug);
     if (win) win.style.zIndex = getTopZIndex() + 1;
+}
+
+function initMainTerminalControls() {
+    const mainTerminal = document.getElementById('main-terminal');
+    if (mainTerminal) {
+        const redBtn = mainTerminal.querySelector('.btn.red');
+        const yellowBtn = mainTerminal.querySelector('.btn.yellow');
+        const greenBtn = mainTerminal.querySelector('.btn.green');
+
+        if (redBtn) {
+            redBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                // Red close button is disabled for the main terminal
+            });
+        }
+        if (yellowBtn) {
+            yellowBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                minimizeWindow('main-terminal');
+            });
+        }
+        if (greenBtn) {
+            greenBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                maximizeWindow('main-terminal');
+            });
+        }
+
+        mainTerminal.addEventListener('mousedown', () => {
+            focusWindow('main-terminal');
+        });
+    }
+
+    const logo = document.querySelector('.logo');
+    if (logo) {
+        logo.style.cursor = 'pointer';
+        logo.addEventListener('click', () => {
+            const mainTerminal = document.getElementById('main-terminal');
+            if (mainTerminal) {
+                const termInput = document.getElementById('terminal-input');
+                if (termInput) termInput.focus();
+                focusWindow('main-terminal');
+            }
+        });
+    }
 }
 
 function getTopZIndex() {
@@ -681,6 +929,7 @@ function makeDraggable(el) {
 // Initial focus
 document.addEventListener('DOMContentLoaded', () => {
     runBootSequence();
+    initMainTerminalControls();
     
     // Floating Quick Theme Selector Event Bindings
     const quickBtn = document.getElementById('theme-quick-btn');

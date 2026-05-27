@@ -15,6 +15,34 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    /* Firefox scrollbars */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+
+/* Custom premium macOS-style scrollbars */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 4px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    transition: background-color 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-color);
+    border: 2px solid transparent;
+    background-clip: padding-box;
 }
 
 body {
@@ -119,6 +147,13 @@ nav a:hover {
     height: 12px;
     border-radius: 50%;
     cursor: pointer;
+    transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn:hover {
+    transform: scale(1.15);
+    filter: brightness(1.2);
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.15);
 }
 
 .red {
@@ -300,6 +335,7 @@ nav a:hover {
 
 /* Maximized Window State */
 .terminal-window.maximized {
+    position: absolute !important;
     top: 100px !important;
     left: 50px !important;
     width: calc(100% - 100px) !important;
@@ -1095,6 +1131,8 @@ body.theme-midnight {
         left: 20px;
     }
 }
-
-
-
+/* Docker prompt styles */
+.docker-root-prompt {
+    color: #ff5f56;
+    font-weight: bold;
+}
