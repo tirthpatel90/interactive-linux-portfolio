@@ -13,16 +13,24 @@ let historyIndex = -1;
 const sections = {
     whoami: {
         title: "About Section",
-        content: `<p class="user" style="font-size: 1.2rem; font-weight: bold; margin-bottom: 10px;">Tirth Patel</p>
-                  <p>Information Technology student at LDRP Institute of Technology and Research.</p>
-                  <br>
-                  <p>Interested in Cloud Computing, DevOps, and scalable backend systems.</p>
-                  <p>Currently learning AWS, Docker, CI/CD pipelines, and system design.</p>
-                  <br>
-                  <p>I enjoy building practical projects, exploring new technologies,</p>
-                  <p>and improving my problem-solving skills through coding.</p>
-                  <br>
-                  <p><span class="highlight">Location:</span>India</p>`
+        content: `
+            <div class="profile-card" id="profile-card-about">
+                <div class="profile-visuals">
+                    <img src="profile.jpg" onerror="this.src='https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=300&q=80'" class="profile-img-view" id="profile-avatar-img" style="position: relative; opacity: 1;">
+                </div>
+                <div class="profile-info">
+                    <p class="user" style="font-size: 1.25rem; font-weight: bold; margin-bottom: 4px;">Tirth Patel</p>
+                    <p style="font-size: 0.8rem; opacity: 0.8; font-family: var(--font-mono); color: var(--accent-color); font-weight: bold;">DevOps & Cloud Systems Engineer</p>
+                    <p style="margin-top: 5px; font-size: 0.85rem; line-height: 1.45; color: #8b949e;">Information Technology student at LDRP Institute of Technology and Research.</p>
+                    <p style="font-size: 0.85rem; line-height: 1.45; color: #8b949e;">Interested in Cloud Architectures, DevOps CI/CD automation, and virtualization sandboxes.</p>
+                </div>
+            </div>
+            <br>
+            <p>Currently learning AWS services, Docker containers, automated pipelines, and system architectures.</p>
+            <p>I enjoy designing developer utilities, implementing interactive console sandboxes, and debugging cloud systems.</p>
+            <br>
+            <p><span class="highlight">Location:</span> India (GMT +5:30)</p>
+        `
     },
     skills: {
         title: "Skills Inventory",
@@ -190,6 +198,10 @@ const sections = {
                     <i class="fas fa-folder file-icon folder"></i>
                     <span class="file-name">contact</span>
                 </div>
+                <div class="file-item" data-action="server">
+                    <i class="fas fa-server file-icon" style="color: var(--success-color);"></i>
+                    <span class="file-name">linux_server</span>
+                </div>
                 <div class="file-item" data-action="resume">
                     <i class="fas fa-file-pdf file-icon pdf"></i>
                     <span class="file-name">resume.pdf</span>
@@ -263,7 +275,7 @@ let dockerState = {
 
 const containerCommands = ['ls', 'yum', 'exit', 'help', 'clear', 'whoami'];
 const centosFiles = ['bin/', 'etc/', 'home/', 'var/', 'usr/', 'root/', 'opt/', 'tmp/'];
-const commands = ['whoami', 'skills', 'projects', 'experience', 'connect', 'resume', 'help', 'clear', 'ls', 'files', 'theme', 'docker'];
+const commands = ['whoami', 'skills', 'projects', 'experience', 'connect', 'resume', 'help', 'clear', 'ls', 'files', 'theme', 'docker', 'server'];
 
 // Input Handling
 // Initial cursor state
@@ -443,7 +455,9 @@ function executeCommand(input) {
     }
 
     // REGULAR PORTFOLIO COMMANDS
-    if (sections[cmd]) {
+    if (cmd === 'whoami') {
+        openSection('whoami');
+    } else if (sections[cmd]) {
         openSection(cmd);
     } else if (cmd === 'resume') {
         const output = document.createElement('div');
@@ -455,6 +469,8 @@ function executeCommand(input) {
         termHistory.innerHTML = '';
     } else if (cmd === 'files') {
         openSection('files');
+    } else if (cmd === 'wasm' || cmd === 'server') {
+        spawnWasmTerminal();
     } else if (cmd === 'theme') {
         if (args.length === 0) {
             openSection('theme');
@@ -475,7 +491,7 @@ function executeCommand(input) {
     } else if (cmd === 'help' || cmd === 'ls') {
         const output = document.createElement('div');
         output.className = 'output';
-        output.innerHTML = `Available commands: <br>${commands.join(', ')}`;
+        output.innerHTML = `Available commands: <br>${commands.join(', ')}<br><br>💡 Try: 'server' to run a real WebAssembly Linux Server in your browser!`;
         termHistory.appendChild(output);
     } else {
         const output = document.createElement('div');
@@ -624,6 +640,10 @@ Try running: ${cmd} install nginx
 }
 
 function openSection(slug) {
+    if (slug === 'server' || slug === 'wasm') {
+        spawnWasmTerminal();
+        return;
+    }
     const data = sections[slug];
     if (!data) return;
 
@@ -995,3 +1015,67 @@ document.addEventListener('click', (e) => {
     }
 });
 termInput.focus();
+
+function spawnWasmTerminal() {
+    const slug = 'wasm';
+    const existing = document.getElementById(`window-${slug}`);
+    if (existing) {
+        focusWindow(slug);
+        return;
+    }
+
+    const win = document.createElement('div');
+    win.className = 'terminal-window spawned-window';
+    win.id = `window-${slug}`;
+    
+    // Set proper layout window dimensions for terminal container
+    win.style.width = '700px';
+    win.style.height = '450px';
+    
+    const isMobile = window.innerWidth <= 768;
+    if (isMobile) {
+        win.style.left = '0px';
+        win.style.top = '0px';
+        win.style.width = '100%';
+        win.style.height = 'auto';
+    } else {
+        win.style.left = `${50 + Math.random() * 100}px`;
+        win.style.top = `${50 + Math.random() * 100}px`;
+    }
+    win.style.zIndex = getTopZIndex() + 1;
+
+    win.innerHTML = `
+        <div class="terminal-header">
+            <div class="header-buttons">
+                <span class="btn red"></span>
+                <span class="btn yellow"></span>
+                <span class="btn green"></span>
+            </div>
+            <div class="header-title"><i class="fas fa-microchip"></i> mainframe-core // WebAssembly Alpine Linux</div>
+        </div>
+        <div class="terminal-body wasm-container" style="padding: 0; background: #000; overflow-y: auto; height: calc(100% - 37px);">
+            <iframe class="wasm-terminal-frame" src="https://copy.sh/v86/?profile=alpine" style="height: 1000px; width: 100%; border: none;" scrolling="no" allowfullscreen></iframe>
+        </div>
+    `;
+
+    // Add event listeners
+    const header = win.querySelector('.terminal-header');
+    header.addEventListener('mousedown', () => focusWindow(slug));
+
+    win.querySelector('.btn.red').addEventListener('click', () => closeWindow(slug));
+    win.querySelector('.btn.yellow').addEventListener('click', () => minimizeWindow(slug));
+    win.querySelector('.btn.green').addEventListener('click', () => {
+        win.classList.toggle('maximized');
+        if (win.classList.contains('maximized')) {
+            win.style.width = '';
+            win.style.height = '';
+        } else {
+            win.style.width = '700px';
+            win.style.height = '450px';
+        }
+    });
+
+    windowContainer.appendChild(win);
+    makeDraggable(win);
+    focusWindow(slug);
+}
