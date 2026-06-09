@@ -1,121 +1,135 @@
-# 💻 ~/tirth.dev | Interactive Linux Shell & DevOps Portfolio
+# 💻 Interactive Linux Desktop Portfolio (Serverless Unix Workspace)
 
 <p align="center">
-  <img src="https://img.shields.io/github/stars/tirthpatel90/My-Portfolio-?style=for-the-badge&color=58a6ff&logo=github" alt="GitHub Stars"/>
-  <img src="https://img.shields.io/github/forks/tirthpatel90/My-Portfolio-?style=for-the-badge&color=3fb950&logo=git" alt="GitHub Forks"/>
-  <img src="https://img.shields.io/github/license/tirthpatel90/My-Portfolio-?style=for-the-badge&color=bc8cff" alt="License"/>
+  <a href="https://github.com/tirthpatel90/My-Portfolio-/stargazers"><img src="https://img.shields.io/github/stars/tirthpatel90/My-Portfolio-?style=for-the-badge&color=58a6ff&logo=github" alt="GitHub Stars"/></a>
+  <a href="https://github.com/tirthpatel90/My-Portfolio-/network/members"><img src="https://img.shields.io/github/forks/tirthpatel90/My-Portfolio-?style=for-the-badge&color=3fb950&logo=git" alt="GitHub Forks"/></a>
+  <a href="https://github.com/tirthpatel90/My-Portfolio-/blob/main/LICENSE"><img src="https://img.shields.io/github/license/tirthpatel90/My-Portfolio-?style=for-the-badge&color=bc8cff" alt="License"/></a>
 </p>
 
 <p align="center">
-  <strong>A premium, fully interactive, Unix-themed developer portfolio featuring draggable desktop windows, a functional host shell, an isolated Docker simulator, and a real serverless WebAssembly Linux operating system!</strong>
+  <strong>A premium, fully interactive, browser-based Linux Desktop Environment styled as a Unix workspace. Fully serverless, running mock Docker containers and booting real WebAssembly-based Alpine Linux operating systems locally on the client side!</strong>
 </p>
 
 ---
 
-## 🌟 Live Demo
-👉 Experience the interactive mainframe environment live: **[tirthdev-portfolio.vercel.app](https://tirthdev-portfolio.vercel.app/)**
+## 🌐 Live Mainframe Demo
+Try the interactive shell environment live here: **[tirthdev-portfolio.vercel.app](https://tirthdev-portfolio.vercel.app/)**
 
 ---
 
-## 🚀 Key Highlights & "Wow" Features
-
-### 🖥️ 1. WebAssembly Linux Server (100% Free & Secure)
-Boot up a real, fully functional x86 Alpine Linux operating system directly inside a draggable retro terminal window!
-*   **Browser-Side Emulation:** Powered by client-side WebAssembly (`v86`). The entire OS boots in under 5 seconds, using the visitor's browser CPU/RAM to virtualize CPU cycles, hardware clocks, and terminal interfaces with **zero backend server costs**.
-*   **Themed Draggable Console:** Complete with an integrated styled scrollbar that blends with your theme, allowing you to browse different OS types (Alpine, Arch Linux, Android, ELKS) easily.
-
-### 🐳 2. Simulated Docker Container Sandbox
-Need a CentOS or Ubuntu sandbox? Type `docker run -it centos` in the host shell to spin up an isolated virtual container prompt!
-*   **Dynamic Prompt Transitions:** Prompts swap to warnings-red root configurations (`[root@centos-container /]#`).
-*   **Isolated Command Set:** Run sandbox-specific commands (`ls` lists simulated CentOS directory trees, `whoami` outputs `root`).
-*   **Installer Progress Loops:** Type `yum install nginx` or `apt install nginx` to trigger full downloading, package dependency verification, and installer speed progress loops matching real Linux stdout outputs!
-
-### 🎨 3. Sleek Glassmorphic Retro Mainframe HUD
-*   **Draggable Windows:** A custom window manager allows visitors to drag, collapse, maximize, and stack multiple applications (`about`, `skills`, `projects`, `files`, `connect`).
-*   **Unified Custom Scrollbars:** Standard scrollbars are completely replaced with an ultra-thin, sleek glassmorphic scrollbar that matches your active theme automatically.
-*   **Quick Themes Engine:** Change your environment restyling on the fly (Dracula, Matrix Green, GitHub Dark, Tokyo Night, Midnight Black) using the settings gear widget or the terminal `theme [name]` CLI.
+## 🎯 Project Vision
+Most developer portfolios are static templates. This repository contains a fully functional **virtual desktop environment** built with vanilla web technologies. It is designed specifically for **DevOps, Cloud, Systems, and Backend Engineers** to showcase infrastructure administration, shell operations, container orchestration, and system configurations interactively.
 
 ---
 
-## 🛠️ Tech Stack & Architecture
+## ✨ Key Capabilities & Mocks
 
-<p align="center">
-  <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5"/>
-  <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3"/>
-  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript"/>
-  <img src="https://img.shields.io/badge/WebAssembly-654FF0?style=for-the-badge&logo=webassembly&logoColor=white" alt="WebAssembly"/>
-  <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker"/>
-  <img src="https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black" alt="Linux"/>
-</p>
+### 🖥️ 1. Client-Side WebAssembly Terminal (Path A)
+Spawns a draggable, retro terminal window running a **real, serverless Alpine Linux kernel** in-browser via WebAssembly (`v86`).
+*   **100% Free Hosting:** Virtualization executes entirely in the visitor's browser thread via Wasm. No virtual private servers (VPS) are rented or required.
+*   **Full Terminal Emulator:** Boots from a compressed x86 Alpine disk image and runs commands locally.
 
-### System Architecture Flow
+### 🐳 2. Simulated Docker Container Engine
+Allows recruiters to run mock container commands (`docker run -it centos`) inside the host prompt.
+*   **Environment Shifting:** Swaps console variables to warning-red root layouts (`[root@centos-container /]#`).
+*   **Isolated Filesystems:** Simulates internal directory structures (`/bin`, `/etc`, `/var`, `/opt`).
+*   **InstallerStdout Simulation:** Type `yum install nginx` or `apt install nginx` to execute complete download sequences, package validations, and setup loops mimicking real Linux installer outputs.
+
+### 🎨 3. Glassmorphic Desktop Window System
+*   **Draggable & Maximizable Windows:** Draggable desktop app containers (`about`, `skills`, `projects`, `files`, `connect`) with double-click window focus management.
+*   **Theme Switcher Engine:** Change background styles dynamically (Dracula Dark, Matrix Green, GitHub Dark, Tokyo Night, Midnight Black) via console commands (`theme [name]`) or the floating settings gear widget.
+
+---
+
+## 🛠️ Tech Stack
+*   **Core Logic & Structure:** HTML5, CSS3, JavaScript (ES6+, Vanilla, 100% Client-Side)
+*   **Virtualization Core:** WebAssembly (Wasm via compiled `v86` emulator)
+*   **Visual Assets & Layout:** FontAwesome Icons, Google Fonts (JetBrains Mono & Inter)
+*   **Mailer System:** Formspree API Integrations
+
+---
+
+## ⚙️ Architecture & Sequence Flow
 
 ```mermaid
-graph TD
-    User([Portfolio Visitor]) --> UI[Host Shell & Glassmorphic Desktop HUD]
-    
-    subgraph Host_Commands [Host Command Router]
-        UI -->|'server'| WASM[WebAssembly Alpine OS Emulator]
-        UI -->|'docker run'| DOCKER[Simulated CentOS/Ubuntu Sandbox]
-        UI -->|'theme'| THEME[Dynamic Theme Switcher Engine]
-        UI -->|'whoami'| BIO[Rounded Executive Headshot Bio Card]
-    end
-    
-    subgraph Wasm_Layer [Virtual Operating System Layer]
-        WASM -->|Loads v86 Engine| Guest_CPU[Virtualized x86 in Browser WebWorker]
-    end
+sequenceDiagram
+    autonumber
+    actor Visitor as Portfolio Visitor
+    participant Host as Host Terminal CLI
+    participant Docker as Docker Simulator Engine
+    participant WASM as WebAssembly v86 Guest OS
+
+    Visitor->>Host: Input command: 'docker run -it centos'
+    Host->>Docker: Initialize container prompt lifecycle
+    Docker->>Host: Swap prompt prefix to [root@centos-container /]#
+    Visitor->>Host: Input command: 'server'
+    Host->>WASM: Mount terminal body, load v86 WebAssembly kernel
+    WASM->>Visitor: Boot real Linux shell in draggable window frame
 ```
 
 ---
 
-## 📁 Repository Structure
-```
-.
-├── index.html         # Main workspace markup & terminal elements
-├── style.css          # Glassmorphism desktop tokens, keyframe glits, and customized scrollbars
-├── script.js         # Core shell routers, autocompletes, Wasm iframe launchers & Docker state engines
-├── profile.jpg        # Executive profile photo
-├── Resume.pdf         # Professional downloadable resume
-└── README.md          # Project overview & documentation
-```
+## 🚀 Local Setup & Installation
+
+Because the portfolio loads dynamic cross-origin assets (like the virtual WebAssembly disk images and external links), **modern browsers block file loads if opened directly from local folders (`file://`) due to CORS security rules**. 
+
+To run and preview the codebase locally:
+
+1. **Fork this repository** on GitHub.
+2. **Clone the repository** to your local machine:
+   ```bash
+   git clone https://github.com/your-username/My-Portfolio-.git
+   ```
+3. **Launch a local server** in the repository root directory:
+   * **Python (Recommended):**
+     ```bash
+     python -m http.server 8000
+     ```
+     Open `http://localhost:8000` in your browser.
+   * **Node.js (Alternative):**
+     ```bash
+     npx live-server
+     ```
 
 ---
 
-## 💻 Console Commands List
+## 🎨 How to Customize the Portfolio for Yourself
 
-| Command | Arguments | Description |
-| :--- | :--- | :--- |
-| **`help`** | None | Prints available workspace command specifications. |
-| **`server`** | None | Launches the draggable WebAssembly x86 Alpine Linux server. |
-| **`docker`** | `ps` \| `images` \| `run -it [centos/ubuntu]` | Manages the simulated isolated CentOS/Ubuntu containers. |
-| **`whoami`** | None | Opens the About Me bio card featuring your real picture. |
-| **`skills`** | None | Opens the interactive visual programming language tree. |
-| **`projects`**| None | Logs all active software development deployments. |
-| **`experience`**| None | Logs Azure internship timelines and background. |
-| **`files`** | None | Launches the double-clickable folder browser. |
-| **`theme`** | `[dracula/matrix/github/tokyonight/midnight]` | Switches the system colors on the fly. |
-| **`connect`** | None | Opens the SMTP-ready Formspree mailbox window. |
-| **`clear`** | None | Clears the host console logs history. |
+This project is built to be easily customizable so that other developers can use it as their own portfolio:
 
----
+### 1. Update Personal Metadata (Bio & Profile Image)
+*   **Replace Profile Photo:** Overwrite the `profile.jpg` file in the root folder with your own headshot.
+*   **Modify About Me section:** Open [script.js](file:///c:/Users/tirth/Portfolio/script.js) and update the `sections.whoami.content` string with your bio, details, and GMT timezone details.
 
-## 🤝 Hosting & Customization (100% Serverless)
+### 2. Update Skills Inventory
+*   Open [script.js](file:///c:/Users/tirth/Portfolio/script.js) and locate `sections.skills.content`. Customize the monospace tree-diagram text:
+    ```
+    ├── Languages
+    │   ├── JavaScript
+    │   └── Python
+    ```
 
-This portfolio is **100% serverless, static, and client-side**. It requires absolutely zero database setups, node servers, or paid hosting environments. You can host it completely free on Vercel, Netlify, or GitHub Pages!
-
-If you want to host your own version:
-
-1. **Fork the Repo:** Click the **Fork** button at the top right of this page.
-2. **Deploy instantly:** Simply link the forked repository to Vercel, Netlify, or enable **GitHub Pages** in your repository settings! It will compile and host instantly for free.
-3. **Local Testing (Optional):** If you want to preview the files locally on your computer before pushing, modern browsers block cross-origin iframes (like the v86 emulator) when opened via `file://` protocols due to security rules. To bypass this locally, run a lightweight local helper server in your terminal:
-   * **Python:** `python -m http.server 8000` (and visit `http://localhost:8000`)
-   * **Node.js:** `npx live-server`
+### 3. Setup Your Mailbox
+*   Go to [Formspree](https://formspree.io/) and create a free form.
+*   Open [script.js](file:///c:/Users/tirth/Portfolio/script.js) and locate `sections.connect.content`. Update the Formspree endpoint URL in the form action to point to your new Formspree ID:
+    ```html
+    <form id="connect-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+    ```
 
 ---
 
-## ⭐ Star the Repo!
-If you love this interactive Unix-style hypervisor portfolio, please **give this repository a Star!** It helps other DevOps, Cloud, and Systems Engineers discover this project.
+## 🤝 Contribution Guidelines
 
-### Let's Connect!
-💼 **[LinkedIn Profile](https://www.linkedin.com/in/tirth-patel-3bbb30288)**  
-📧 **[tirthpatel5393@gmail.com](mailto:tirthpatel5393@gmail.com)**
+We welcome contributions to this open-source portfolio project! To contribute:
+1. **Report Bugs / Feature Requests:** Open a GitHub Issue detailing the query.
+2. **Submit Code Upgrades:**
+   * Create a new feature branch (`git checkout -b feature/cool-upgrade`).
+   * Commit your changes (`git commit -m "feat: add cyber security scan simulator"`).
+   * Open a Pull Request for review!
+
+---
+
+## 📄 License & Badges
+This repository is open-sourced under the [MIT License](LICENSE). Feel free to use, modify, and deploy this workspace for your own professional portfolio!
+
+*If you found this codebase useful, please **give it a Star (⭐)**! It helps other Cloud/DevOps engineers discover this open-source project.*
