@@ -78,7 +78,7 @@ To run and preview the codebase locally:
 1. **Fork this repository** on GitHub.
 2. **Clone the repository** to your local machine:
    ```bash
-   git clone https://github.com/your-username/My-Portfolio-.git
+   git clone https://github.com/your-username/interactive-linux-portfolio.git
    ```
 3. **Launch a local server** in the repository root directory:
    * **Python (Recommended):**
@@ -93,28 +93,80 @@ To run and preview the codebase locally:
 
 ---
 
-## 🎨 How to Customize the Portfolio for Yourself
+## 🔧 How to Customize This Portfolio for Yourself
 
-This project is built to be easily customizable so that other developers can use it as their own portfolio:
+This project is built to be modular so you can make it your own. Here is a detailed guide on what to change to customize it with your personal information:
 
-### 1. Update Personal Metadata (Bio & Profile Image)
-*   **Replace Profile Photo:** Overwrite the `profile.jpg` file in the root folder with your own headshot.
-*   **Modify About Me section:** Open [script.js](file:///c:/Users/tirth/Portfolio/script.js) and update the `sections.whoami.content` string with your bio, details, and GMT timezone details.
+### 1. Change the Profile Picture (PFP)
+*   Find your profile picture and rename it exactly to **`profile.jpg`**.
+*   Replace the existing `profile.jpg` in the root folder of the repository with your new image.
+*   *Note:* Standard dimensions like `300x300` or `500x500` (1:1 square ratio) look best in the glassmorphism card!
 
-### 2. Update Skills Inventory
-*   Open [script.js](file:///c:/Users/tirth/Portfolio/script.js) and locate `sections.skills.content`. Customize the monospace tree-diagram text:
+### 2. Replace the Resume PDF
+*   Generate your resume in PDF format and name it exactly **`Resume.pdf`**.
+*   Replace the existing `Resume.pdf` in the root folder of the repository.
+*   *Note:* Case sensitivity matters! Ensure it is capitalized exactly as `Resume.pdf` so both the `/ files` window links and the `resume` terminal command load it correctly.
+
+### 3. Edit Personal Metadata & Bio
+Open **`script.js`** and locate the `sections` dictionary (around line 13). Modify the following fields:
+*   **About Me Bio:** Under `sections.whoami.content`, replace the text inside the template literal with your name, job title/specialization, details about your studies, interests, and location coordinates:
+    ```javascript
+    whoami: {
+        title: "About Section",
+        content: `
+            <div class="profile-card" id="profile-card-about">
+                <div class="profile-visuals">
+                    <img src="profile.jpg" ...>
+                </div>
+                <div class="profile-info">
+                    <p class="user">Your Name Here</p>
+                    <p>Your Title Here</p>
+                    ...
+                </div>
+            </div>
+            ...
+        `
+    }
     ```
-    ├── Languages
-    │   ├── JavaScript
-    │   └── Python
-    ```
+*   **Skills Tree:** Under `sections.skills.content`, edit the custom ASCII tree blocks to list your language skills, cloud assets, dev tools, and backend frameworks. Keep the structure characters (`├──`, `│   `, `└──`) intact so the directory tree format renders cleanly!
+*   **Projects List:** Under `sections.projects.content`, customize the project items list. Edit links to point to your GitHub projects, and update titles, description bullets, and technology tags.
+*   **Experience Timeline:** Under `sections.experience.content`, modify the internship, job, or education cards with your details.
 
-### 3. Setup Your Mailbox
-*   Go to [Formspree](https://formspree.io/) and create a free form.
-*   Open [script.js](file:///c:/Users/tirth/Portfolio/script.js) and locate `sections.connect.content`. Update the Formspree endpoint URL in the form action to point to your new Formspree ID:
+### 4. Update the Contact Mailer Endpoint
+To make the connect form email messages straight to your inbox:
+1. Go to [Formspree](https://formspree.io/) (it's free) and create a form.
+2. Open **`script.js`** and go to `sections.connect.content` (around line 143).
+3. Replace the Formspree endpoint token in the form action with your own Formspree form ID:
+   ```html
+   <form id="connect-form" action="https://formspree.io/f/YOUR_FORMSPREE_ID" method="POST">
+   ```
+
+### 5. Update HTML Titles, Logos, & Social Links
+Open **`index.html`** and edit the following lines:
+*   **Page Title (Line 7):** Replace `<title>Tirth Patel | Interactive Linux Shell</title>` with your name.
+*   **Header Logo (Line 26):** Replace the prompt icon label text `~/tirth.dev` with your own username/domain.
+*   **Social Link Buttons (Lines 68-74):** Update the `href` links for GitHub, LinkedIn, and the mailto email parameters with your personal links:
     ```html
-    <form id="connect-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+    <a href="https://github.com/your-username" ...>github</a>
+    <a href="https://www.linkedin.com/in/your-profile" ...>linkedin</a>
+    <a href="mailto:your-email@gmail.com" ...>email</a>
     ```
+
+### 6. Extend or Modify Terminal Commands
+If you want to add a new command, say `certifications` or `contact`:
+1. Open **`script.js`** and find the global `commands` array (around line 288):
+   ```javascript
+   const commands = ['whoami', 'skills', ..., 'your_command'];
+   ```
+2. Scroll to `executeCommand(input)` and add a routing gate for your command:
+   ```javascript
+   } else if (cmd === 'your_command') {
+       const output = document.createElement('div');
+       output.className = 'output';
+       output.innerHTML = `This is the custom output of your command!`;
+       termHistory.appendChild(output);
+   }
+   ```
 
 ---
 
