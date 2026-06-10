@@ -25,9 +25,20 @@ Most developer portfolios are static templates. This repository contains a fully
 ## ✨ Key Capabilities & Mocks
 
 ### 🖥️ 1. Client-Side WebAssembly Terminal (Path A)
-Spawns a draggable, retro terminal window running a **real, serverless Alpine Linux kernel** in-browser via WebAssembly (`v86`).
-*   **100% Free Hosting:** Virtualization executes entirely in the visitor's browser thread via Wasm. No virtual private servers (VPS) are rented or required.
-*   **Full Terminal Emulator:** Boots from a compressed x86 Alpine disk image and runs commands locally.
+Spawns a draggable, retro terminal window running a **real, serverless virtual machine emulator** in-browser via WebAssembly (`v86`).
+*   **100% Free Hosting:** Virtualization executes entirely in the visitor's browser thread via Wasm. No virtual private servers (VPS) are rented or required, meaning your portfolio hosting is completely free.
+*   **Draggable Terminal Overlay:** Fitted with customized, sleek webkit-scrollbars that match your desktop themes.
+*   **Supported Operating Systems:** The underlying `v86` emulator runs a real x86 emulation layer in WebAssembly. You can configure it to load several pre-configured operating system profiles:
+    *   🐧 **Alpine Linux (Default):** A super-lightweight security-oriented Linux server shell (`profile=alpine`).
+    *   🚀 **Arch Linux:** A customized 32-bit Linux terminal containing packages like Python, Git, and system logs (`profile=archlinux`).
+    *   📦 **NodeOS:** A lightweight operating system built on top of the Linux kernel, using Node.js as the primary userspace runtime (`profile=nodeos`).
+    *   🛠️ **Buildroot Linux:** A minimal embedded Linux setup precompiled with networking utilities (`profile=buildroot`).
+    *   💾 **FreeDOS:** A complete, free MS-DOS compatible operating system for running legacy command-line applications (`profile=freedos`).
+    *   🛡️ **OpenBSD:** A security-focused, multi-platform Unix-like operating system (`profile=openbsd`).
+    *   🐦 **KolibriOS:** An extremely fast assembly-written graphical OS (`profile=kolibrios`).
+    *   💻 **Damn Small Linux:** A 50MB lightweight desktop environment precompiled with legacy Firefox web browsers (`profile=dsl`).
+    *   🏁 **Windows 98:** A classic retro Windows desktop GUI running in-browser (`profile=windows98`).
+
 
 ### 🐳 2. Simulated Docker Container Engine
 Allows recruiters to run mock container commands (`docker run -it centos`) inside the host prompt.
@@ -89,9 +100,47 @@ To run and preview the codebase locally:
    * **Node.js (Alternative):**
      ```bash
      npx live-server
-     ```
+ 
+### 7. Change the Default WebAssembly OS Profile
+By default, the WebAssembly terminal environment (via the `server` or `wasm` command) boots Alpine Linux. You can easily switch this to run any of the other supported operating systems:
+1. Open **`script.js`** and locate the `spawnWasmTerminal()` function.
+2. Find the code line loading the `iframe` element (around line 1057):
+   ```html
+   <iframe class="wasm-terminal-frame" src="https://copy.sh/v86/?profile=alpine" ...>
+   ```
+3. Change the `profile` parameter value from `alpine` to any of the other supported profiles:
+   * **Arch Linux:** `?profile=archlinux`
+   * **NodeOS:** `?profile=nodeos`
+   * **Buildroot:** `?profile=buildroot`
+   * **FreeDOS:** `?profile=freedos`
+   * **OpenBSD:** `?profile=openbsd`
+   * **KolibriOS:** `?profile=kolibrios`
+   * **Damn Small Linux:** `?profile=dsl`
+   * **Windows 98:** `?profile=windows98`
+4. Update the title text in the terminal window header (around line 1054) to match the selected OS:
+   ```javascript
+   <div class="header-title"><i class="fas fa-microchip"></i> mainframe-core // WebAssembly Arch Linux</div>
+   ```
+
 
 ---
+
+### Supported OS Profiles
+
+| OS | Description | Profile Parameter |
+|---|---|---|
+| Alpine Linux | Lightweight server OS | `alpine` |
+| Arch Linux | Rolling release Linux distro | `archlinux` |
+| NodeOS | Node.js as init system | `nodeos` |
+| Buildroot Linux | Minimal embedded Linux | `buildroot` |
+| FreeDOS | MS-DOS compatible OS | `freedos` |
+| OpenBSD | Security-focused Unix | `openbsd` |
+| KolibriOS | Assembly graphical OS | `kolibrios` |
+| Damn Small Linux | Tiny Linux with X and Firefox | `dsl` |
+| Windows 98 | Classic Windows GUI | `windows98` |
+
+---
+
 
 ## 🔧 How to Customize This Portfolio for Yourself
 
