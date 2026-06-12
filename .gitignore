@@ -1,0 +1,31 @@
+# OS Metadata Junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDEs & Text Editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+.project
+.settings/
+
+# Local Server & Dependency Packages
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Local env / configurations
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local

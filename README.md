@@ -7,6 +7,10 @@
 </p>
 
 <p align="center">
+  <img src="demo.png" alt="Portfolio Screenshot" width="800" style="border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.4);"/>
+</p>
+
+<p align="center">
   <strong>A premium, fully interactive, browser-based Linux Desktop Environment styled as a Unix workspace. Fully serverless, running mock Docker containers and booting real WebAssembly-based Alpine Linux operating systems locally on the client side!</strong>
 </p>
 
@@ -144,89 +148,27 @@ By default, the WebAssembly terminal environment (via the `server` or `wasm` com
 
 ## 🔧 How to Customize This Portfolio for Yourself
 
-This project is built to be modular so you can make it your own. Here is a detailed guide on what to change to customize it with your personal information:
+This project is built to be extremely beginner-friendly. All personalization content is extracted into a single configuration file: **[config.js](file:///c:/Users/tirth/Portfolio/config.js)**.
 
-### 1. Change the Profile Picture (PFP)
-*   Find your profile picture and rename it exactly to **`profile.jpg`**.
-*   Replace the existing `profile.jpg` in the root folder of the repository with your new image.
-*   *Note:* Standard dimensions like `300x300` or `500x500` (1:1 square ratio) look best in the glassmorphism card!
+### 1. Centralized Configuration (config.js)
+Open **`config.js`** in your editor and customize the values in the `CONFIG` object:
+*   **Page Metadata:** Change `pageTitle` and `logoPrompt`.
+*   **Terminal Details:** Change `terminalUser` and `terminalHost` to update console prefixes.
+*   **Bio/About Details:** Edit fields under `about` to reflect your name, role, learning interests, and coordinates.
+*   **Skills Tree:** Modify the `skills.treeCol1` and `skills.treeCol2` ASCII text layout columns.
+*   **Projects & Experience:** Update lists of projects and experience items. They will be formatted and rendered automatically.
+*   **Formspree Mailer:** Set your Formspree form ID under `connect.formspreeId` to receive form submissions.
+*   **Social & Resume Links:** Update the `socials` array with your profile links and icons, and define the `resumeUrl` path.
 
-### 2. Replace the Resume PDF
-*   Generate your resume in PDF format and name it exactly **`Resume.pdf`**.
-*   Replace the existing `Resume.pdf` in the root folder of the repository.
-*   *Note:* Case sensitivity matters! Ensure it is capitalized exactly as `Resume.pdf` so both the `/ files` window links and the `resume` terminal command load it correctly.
-
-### 3. Edit Personal Metadata & Bio
-Open **`script.js`** and locate the `sections` dictionary (around line 13). Modify the following fields:
-*   **About Me Bio:** Under `sections.whoami.content`, replace the text inside the template literal with your name, job title/specialization, details about your studies, interests, and location coordinates:
-    ```javascript
-    whoami: {
-        title: "About Section",
-        content: `
-            <div class="profile-card" id="profile-card-about">
-                <div class="profile-visuals">
-                    <img src="profile.jpg" ...>
-                </div>
-                <div class="profile-info">
-                    <p class="user">Your Name Here</p>
-                    <p>Your Title Here</p>
-                    ...
-                </div>
-            </div>
-            ...
-        `
-    }
-    ```
-*   **Skills Tree:** Under `sections.skills.content`, edit the custom ASCII tree blocks to list your language skills, cloud assets, dev tools, and backend frameworks. Keep the structure characters (`├──`, `│   `, `└──`) intact so the directory tree format renders cleanly!
-*   **Projects List:** Under `sections.projects.content`, customize the project items list. Edit links to point to your GitHub projects, and update titles, description bullets, and technology tags.
-*   **Experience Timeline:** Under `sections.experience.content`, modify the internship, job, or education cards with your details.
-
-### 4. Update the Contact Mailer Endpoint
-To make the connect form email messages straight to your inbox:
-1. Go to [Formspree](https://formspree.io/) (it's free) and create a form.
-2. Open **`script.js`** and go to `sections.connect.content` (around line 143).
-3. Replace the Formspree endpoint token in the form action with your own Formspree form ID:
-   ```html
-   <form id="connect-form" action="https://formspree.io/f/YOUR_FORMSPREE_ID" method="POST">
-   ```
-
-### 5. Update HTML Titles, Logos, & Social Links
-Open **`index.html`** and edit the following lines:
-*   **Page Title (Line 7):** Replace `<title>Tirth Patel | Interactive Linux Shell</title>` with your name.
-*   **Header Logo (Line 26):** Replace the prompt icon label text `~/tirth.dev` with your own username/domain.
-*   **Social Link Buttons (Lines 68-74):** Update the `href` links for GitHub, LinkedIn, and the mailto email parameters with your personal links:
-    ```html
-    <a href="https://github.com/your-username" ...>github</a>
-    <a href="https://www.linkedin.com/in/your-profile" ...>linkedin</a>
-    <a href="mailto:your-email@gmail.com" ...>email</a>
-    ```
-
-### 6. Extend or Modify Terminal Commands
-If you want to add a new command, say `certifications` or `contact`:
-1. Open **`script.js`** and find the global `commands` array (around line 288):
-   ```javascript
-   const commands = ['whoami', 'skills', ..., 'your_command'];
-   ```
-2. Scroll to `executeCommand(input)` and add a routing gate for your command:
-   ```javascript
-   } else if (cmd === 'your_command') {
-       const output = document.createElement('div');
-       output.className = 'output';
-       output.innerHTML = `This is the custom output of your command!`;
-       termHistory.appendChild(output);
-   }
-   ```
+### 2. Replace Static Assets
+*   **Profile Image:** Place your profile picture named `profile.jpg` in the root folder (or update the path in `config.js`).
+*   **Resume PDF:** Place your resume named `Resume.pdf` in the root folder (or update the path in `config.js`).
 
 ---
 
 ## 🤝 Contribution Guidelines
 
-We welcome contributions to this open-source portfolio project! To contribute:
-1. **Report Bugs / Feature Requests:** Open a GitHub Issue detailing the query.
-2. **Submit Code Upgrades:**
-   * Create a new feature branch (`git checkout -b feature/cool-upgrade`).
-   * Commit your changes (`git commit -m "feat: add cyber security scan simulator"`).
-   * Open a Pull Request for review!
+We welcome contributions to this open-source portfolio project! Please refer to the **[CONTRIBUTING.md](file:///c:/Users/tirth/Portfolio/CONTRIBUTING.md)** file for guidelines on how to report issues, suggest features, and submit pull requests.
 
 ---
 

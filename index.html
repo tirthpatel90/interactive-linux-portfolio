@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tirth Patel | Interactive Linux Shell</title>
+    <title>Interactive Linux Shell Portfolio</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,7 +23,7 @@
     <div class="background-grid"></div>
 
     <header class="navbar">
-        <div class="logo"><span class="prompt-icon">>_</span> ~/tirth.dev</div>
+        <div class="logo" id="logo-container"><span class="prompt-icon">>_</span> <span id="logo-text">~/portfolio</span></div>
         <nav>
             <a href="#" onclick="openSection('whoami')">/ about</a>
             <a href="#" onclick="openSection('skills')">/ skills</a>
@@ -31,7 +31,7 @@
             <a href="#" onclick="openSection('experience')">/ experience</a>
             <a href="#" onclick="openSection('connect')">/ connect</a>
             <a href="#" onclick="openSection('files')">/ files</a>
-            <a href="Resume.pdf" target="_blank">/ resume</a>
+            <a href="Resume.pdf" target="_blank" id="resume-nav-link">/ resume</a>
         </nav>
     </header>
 
@@ -47,14 +47,12 @@
                     <span class="btn yellow"></span>
                     <span class="btn green"></span>
                 </div>
-                <div class="header-title">tirth@linux: ~ (interative)</div>
+                <div class="header-title" id="terminal-header-title">guest@linux: ~ (interactive)</div>
             </div>
             <div class="terminal-body" id="main-terminal-body">
-                <div id="terminal-history">
-                    <div class="output">Welcome to Tirth's interactive shell. <br>Type 'help' to begin.<br>💡 Hint: Type 'server' to boot up a real serverless Linux server inside your browser!</div>
-                </div>
+                <div id="terminal-history"></div>
                 <div class="input-line">
-                    <span class="prompt" id="terminal-prompt-prefix"><span class="user">tirth@linux</span>:<span class="path">~</span>$ </span>
+                    <span class="prompt" id="terminal-prompt-prefix"><span class="user">guest@linux</span>:<span class="path">~</span>$ </span>
                     <div class="input-wrapper">
                         <input type="text" id="terminal-input" autofocus spellcheck="false" autocomplete="off">
                         <span id="ghost-text" class="ghost-text"></span>
@@ -64,12 +62,8 @@
         </div>
     </main>
 
-    <section class="social-links">
-        <a href="https://github.com/tirthpatel90" target="_blank" class="social-btn"><i class="fab fa-github"></i>
-            github</a>
-        <a href="https://www.linkedin.com/in/tirth-patel-3bbb30288" target="_blank" class="social-btn"><i
-                class="fab fa-linkedin"></i> linkedin</a>
-        <a href="mailto:tirthpatel5393@gmail.com" class="social-btn"><i class="fas fa-envelope"></i> email</a>
+    <section class="social-links" id="social-links-container">
+        <!-- Populated dynamically from CONFIG.socials -->
     </section>
 
     <!-- Floating Theme Picker Widget -->
@@ -85,6 +79,7 @@
         <div class="theme-dropdown-item" data-theme="midnight"><span class="dot midnight"></span> Midnight Black</div>
     </div>
 
+    <script src="config.js"></script>
     <script src="script.js"></script>
 </body>
 

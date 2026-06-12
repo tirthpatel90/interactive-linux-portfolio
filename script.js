@@ -12,147 +12,74 @@ let historyIndex = -1;
 
 const sections = {
     whoami: {
-        title: "About Section",
+        title: CONFIG.about.title || "About Section",
         content: `
             <div class="profile-card" id="profile-card-about">
                 <div class="profile-visuals">
-                    <img src="profile.jpg" onerror="this.src='https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=300&q=80'" class="profile-img-view" id="profile-avatar-img" style="position: relative; opacity: 1;">
+                    <img src="${CONFIG.about.pfp}" onerror="this.src='${CONFIG.about.pfpFallback}'" class="profile-img-view" id="profile-avatar-img" style="position: relative; opacity: 1;">
                 </div>
                 <div class="profile-info">
-                    <p class="user" style="font-size: 1.25rem; font-weight: bold; margin-bottom: 4px;">Tirth Patel</p>
-                    <p style="font-size: 0.8rem; opacity: 0.8; font-family: var(--font-mono); color: var(--accent-color); font-weight: bold;">DevOps & Cloud Systems Engineer</p>
-                    <p style="margin-top: 5px; font-size: 0.85rem; line-height: 1.45; color: #8b949e;">Information Technology student at LDRP Institute of Technology and Research.</p>
-                    <p style="font-size: 0.85rem; line-height: 1.45; color: #8b949e;">Interested in Cloud Architectures, DevOps CI/CD automation, and virtualization sandboxes.</p>
+                    <p class="user" style="font-size: 1.25rem; font-weight: bold; margin-bottom: 4px;">${CONFIG.about.name}</p>
+                    <p style="font-size: 0.8rem; opacity: 0.8; font-family: var(--font-mono); color: var(--accent-color); font-weight: bold;">${CONFIG.about.titleRole}</p>
+                    ${CONFIG.about.bioParagraphs.map(p => `<p style="margin-top: 5px; font-size: 0.85rem; line-height: 1.45; color: #8b949e;">${p}</p>`).join('')}
                 </div>
             </div>
             <br>
-            <p>Currently learning AWS services, Docker containers, automated pipelines, and system architectures.</p>
-            <p>I enjoy designing developer utilities, implementing interactive console sandboxes, and debugging cloud systems.</p>
+            ${CONFIG.about.learningAndInterests.map(p => `<p>${p}</p>`).join('<br>')}
             <br>
-            <p><span class="highlight">Location:</span> India (GMT +5:30)</p>
+            <p><span class="highlight">Location:</span> ${CONFIG.about.location}</p>
         `
     },
     skills: {
-        title: "Skills Inventory",
+        title: CONFIG.skills.title || "Skills Inventory",
         content: `
 <div class="tree-container">
     <pre class="tree-view">
-.
-├── <span class="highlight">Languages</span>
-│   ├── JavaScript
-│   ├── HTML/CSS
-│   ├── Python
-│   ├── C/C++
-│   └── SQL
-├── <span class="highlight">Frameworks</span>
-│   ├── React
-│   ├── Node.js
-│   └── Flask
-├── <span class="highlight">Tools</span>
-│   ├── Docker
-│   ├── Git/Github
-│   ├── Postman
-│   └── Github Actions
+${CONFIG.skills.treeCol1.trim()}
     </pre>
     <pre class="tree-view">
-├── <span class="highlight">Cloud/DevOps</span>
-│   ├── AWS
-│   ├── Azure
-│   ├── Kubernetes
-│   ├── CI/CD
-│   └── Oracle
-├── <span class="highlight">Databases</span>
-│   ├── PostgreSQL
-│   ├── MySQL
-│   ├── SQLite
-│   └── Firebase
-├── <span class="highlight">Core Concepts</span>
-│   ├── Linux Fundamentals
-│   ├── Networking Basics
-│   ├── OOP
-│   └── System Design fundamentals
-└── <span class="highlight">Soft Skills</span>
-    ├── Communication
-    ├── Leadership
-    ├── Time Management
-    ├── Problem Solving
-    └── Collaboration
+${CONFIG.skills.treeCol2.trim()}
     </pre>
 </div>`
     },
     projects: {
-        title: "Deployment Log: Projects",
-        content: `
+        title: CONFIG.projectsSectionTitle || "Deployment Log: Projects",
+        content: CONFIG.projects.map(proj => `
             <div class="project-item">
                 <div class="project-item-header">
-                    <a href="https://github.com/tirthpatel90/Data-agnostic-MLOps-pipeline" target="_blank" class="highlight project-name">Data Agnostic MLOps Pipeline</a>
-                    <span class="project-timeline">Ongoing</span>
+                    <a href="${proj.url}" target="_blank" class="highlight project-name">${proj.name}</a>
+                    <span class="project-timeline">${proj.timeline}</span>
                 </div>
                 <ul class="project-desc">
-                    <li>Developed a modular MLOps pipeline designed to automate data ingestion, preprocessing, and model training workflows across multiple data formats (CSV, Excel, JSON).</li>
-                    <li>Implemented structured pipeline orchestration with configuration-based execution and designed project architecture following automation and deployment-ready principles aligned with MLOps & DevOps workflows.</li>
-                    <li>Structured ML pipeline with future containerization support using docker for reproducible execution.</li>
+                    ${proj.description.map(desc => `<li>${desc}</li>`).join('')}
                 </ul>
-                <div class="project-stack"><span class="label">Stack:</span> Python, Pandas, NumPy, Scikit-learn, Docker, CI/CD, GitHub Actions</div>
+                <div class="project-stack"><span class="label">Stack:</span> ${proj.stack}</div>
             </div>
-            <div class="project-item">
-                <div class="project-item-header">
-                    <a href="https://github.com/tirthpatel90/DevOps-Utility-" target="_blank" class="highlight project-name">DevOps Utility Hub</a>
-                    <span class="project-timeline">March 2026</span>
-                </div>
-                <ul class="project-desc">
-                    <li>Developed a client-side DevOps toolkit with multiple utilities for configuration validation, secrets encoding, and infrastructure helpers.</li>
-                    <li>Hosted the application on AWS S3 hosting, demonstrating cloud deployment and lightweight serverless delivery of developer tools.</li>
-                </ul>
-                <div class="project-stack"><span class="label">Stack:</span> JavaScript, HTML/CSS, AWS S3</div>
-            </div>
-            <div class="project-item">
-                <div class="project-item-header">
-                    <a href="https://github.com/tirthpatel90/NAVIQ" target="_blank" class="highlight project-name">NAVIQ – Career Guidance Platform</a>
-                    <span class="project-timeline">Dec 2025 – Jan 2026</span>
-                </div>
-                <ul class="project-desc">
-                    <li>Developed a career guidance platform providing structured learning roadmaps, study resources, and interview preparation support for multiple technical roles.</li>
-                    <li>Build backend REST APIs using python flask with SQLite database integration for managing career and learning data.</li>
-                </ul>
-                <div class="project-stack"><span class="label">Stack:</span> Python, React, Flask, SQLite, Tailwind CSS</div>
-            </div>
-            <div class="project-item">
-                <div class="project-item-header">
-                    <a href="https://github.com/tirthpatel90/Travel-Management-system-" target="_blank" class="highlight project-name">Travel Management System</a>
-                    <span class="project-timeline">Oct 2025 – Dec 2025</span>
-                </div>
-                <ul class="project-desc">
-                    <li>Developed a backend web app using JavaScript to manage tours, hotels, and booking workflows through RESTful APIs.</li>
-                    <li>Implemented role-based control for secure user and admin operations and integrated SQLite database schemas to handle booking, user data, and travel management operations efficiently.</li>
-                </ul>
-                <div class="project-stack"><span class="label">Stack:</span> JavaScript, Node.js, SQLite, JWT Authentication, RESTful APIs</div>
-            </div>`
+        `).join('')
     },
     experience: {
-        title: "SysLog: Experience",
-        content: `
+        title: CONFIG.experienceSectionTitle || "SysLog: Experience",
+        content: CONFIG.experience.map(exp => `
             <div class="experience-item">
                 <div class="experience-header">
-                    <span class="experience-title">Microsoft Azure Intern</span>
-                    <span class="experience-timeline">Jan 2026 – Feb 2026</span>
+                    <span class="experience-title">${exp.title}</span>
+                    <span class="experience-timeline">${exp.timeline}</span>
                 </div>
                 <div class="experience-sub-header">
-                    <span class="experience-company">Microsoft India × AICTE</span>
-                    <span class="experience-location">Remote</span>
+                    <span class="experience-company">${exp.company}</span>
+                    <span class="experience-location">${exp.location}</span>
                 </div>
                 <ul class="experience-bullets">
-                    <li>Completed a 4-week industry focused on Microsoft Azure cloud services fundamentals.</li>
-                    <li>Gained exposure to cloud computing concepts including virtual machines, storage, networking, and deployment models.</li>
-                    <li>Developed foundational understanding of cloud architecture, resource provisioning, and enterprise cloud environment using Microsoft Azure Portal.</li>
+                    ${exp.description.map(bullet => `<li>${bullet}</li>`).join('')}
                 </ul>
-            </div>`
+            </div>
+        `).join('')
     },
     connect: {
-        title: "LinkLayer: Connect",
+        title: CONFIG.connect.title || "LinkLayer: Connect",
         content: `
-            <p style="margin-bottom: 15px;">Establish a secure connection. Send a message directly to my inbox.</p>
-            <form id="connect-form" class="contact-form" action="https://formspree.io/f/xojkvlba" method="POST">
+            <p style="margin-bottom: 15px;">${CONFIG.connect.subtitle || "Establish a secure connection. Send a message directly to my inbox."}</p>
+            <form id="connect-form" class="contact-form" action="https://formspree.io/f/${CONFIG.connect.formspreeId}" method="POST">
                 <div class="form-group">
                     <label for="full-name">Name</label>
                     <input type="text" id="full-name" name="name" placeholder="Your name" required spellcheck="false">
@@ -165,7 +92,7 @@ const sections = {
                 </div>
                 <div class="form-group">
                     <label for="msg-body">Message</label>
-                    <textarea id="msg-body" name="message" required spellcheck="false">I'd like to connect with you!</textarea>
+                    <textarea id="msg-body" name="message" required spellcheck="false">${CONFIG.connect.defaultMessage || "I'd like to connect with you!"}</textarea>
                 </div>
                 <button type="submit" class="send-btn">
                     <i class="fas fa-paper-plane"></i> Transmit Message
@@ -204,7 +131,7 @@ const sections = {
                 </div>
                 <div class="file-item" data-action="resume">
                     <i class="fas fa-file-pdf file-icon pdf"></i>
-                    <span class="file-name">resume.pdf</span>
+                    <span class="file-name">${CONFIG.resumeUrl.toLowerCase()}</span>
                 </div>
             </div>
         `
@@ -380,7 +307,7 @@ function updatePromptPrefix() {
     if (dockerState.active) {
         prefix.innerHTML = `<span class="docker-root-prompt">[${dockerState.user}@${dockerState.host} ${dockerState.path}]#</span> `;
     } else {
-        prefix.innerHTML = `<span class="user">tirth@linux</span>:<span class="path">~</span>$ `;
+        prefix.innerHTML = `<span class="user">${CONFIG.terminalUser}@${CONFIG.terminalHost}</span>:<span class="path">~</span>$ `;
     }
 }
 
@@ -436,7 +363,7 @@ function executeCommand(input) {
     if (dockerState.active) {
         log.innerHTML = `<span class="docker-root-prompt">[${dockerState.user}@${dockerState.host} ${dockerState.path}]#</span> <span class="highlight">${input}</span>`;
     } else {
-        log.innerHTML = `<span class="user">tirth@linux</span>:<span class="path">~</span>$ <span class="highlight">${input}</span>`;
+        log.innerHTML = `<span class="user">${CONFIG.terminalUser}@${CONFIG.terminalHost}</span>:<span class="path">~</span>$ <span class="highlight">${input}</span>`;
     }
     termHistory.appendChild(log);
 
@@ -462,9 +389,9 @@ function executeCommand(input) {
     } else if (cmd === 'resume') {
         const output = document.createElement('div');
         output.className = 'output';
-        output.innerHTML = `<span class="highlight">Opening Resume.pdf...</span>`;
+        output.innerHTML = `<span class="highlight">Opening ${CONFIG.resumeUrl}...</span>`;
         termHistory.appendChild(output);
-        window.open('Resume.pdf', '_blank');
+        window.open(CONFIG.resumeUrl, '_blank');
     } else if (cmd === 'clear') {
         termHistory.innerHTML = '';
     } else if (cmd === 'files') {
@@ -705,7 +632,7 @@ function initFileTree(win) {
         const action = item.dataset.action;
         const openAction = () => {
             if (action === 'resume') {
-                window.open('Resume.pdf', '_blank');
+                window.open(CONFIG.resumeUrl, '_blank');
             } else {
                 const slugMap = {
                     'about': 'whoami',
@@ -948,6 +875,31 @@ function makeDraggable(el) {
 
 // Initial focus
 document.addEventListener('DOMContentLoaded', () => {
+    // Dynamic Initializations from config.js
+    document.title = CONFIG.pageTitle;
+    const logoText = document.getElementById('logo-text');
+    if (logoText) logoText.textContent = CONFIG.logoPrompt;
+    
+    const resumeNav = document.getElementById('resume-nav-link');
+    if (resumeNav) resumeNav.href = CONFIG.resumeUrl;
+
+    const termHeader = document.getElementById('terminal-header-title');
+    if (termHeader) termHeader.textContent = `${CONFIG.terminalUser}@${CONFIG.terminalHost}: ~ (interactive)`;
+
+    const history = document.getElementById('terminal-history');
+    if (history) {
+        history.innerHTML = `<div class="output">${CONFIG.welcomeMessage}</div>`;
+    }
+    updatePromptPrefix(); // Set initial prompt prefix correctly
+
+    const socialContainer = document.getElementById('social-links-container');
+    if (socialContainer && CONFIG.socials) {
+        socialContainer.innerHTML = CONFIG.socials.map(social => {
+            const targetAttr = social.url.startsWith('mailto:') ? '' : 'target="_blank"';
+            return `<a href="${social.url}" ${targetAttr} class="social-btn"><i class="${social.icon}"></i> ${social.name}</a>`;
+        }).join('');
+    }
+
     runBootSequence();
     initMainTerminalControls();
     
@@ -982,11 +934,11 @@ document.addEventListener('DOMContentLoaded', () => {
 async function runBootSequence() {
     const bootScreen = document.getElementById('boot-screen');
     const bootText = document.getElementById('boot-text');
-    const messages = [
+    const messages = CONFIG.bootMessages || [
         "Initializing system...",
         "Loading modules...",
         "Establishing secure connection...",
-        "Welcome to Tirth's terminal"
+        "Welcome to the terminal"
     ];
 
     for (const msg of messages) {
