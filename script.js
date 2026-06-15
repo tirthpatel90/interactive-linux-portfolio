@@ -75,6 +75,26 @@ ${CONFIG.skills.treeCol2.trim()}
             </div>
         `).join('')
     },
+    contributions: {
+        title: CONFIG.contributionsSectionTitle || "Changelog: Open Source Contributions",
+        content: CONFIG.contributions.map(contrib => `
+            <div class="contribution-item">
+                <div class="contribution-header">
+                    <span class="contribution-title">
+                        <a href="${contrib.projectUrl}" target="_blank" class="highlight project-name">${contrib.project}</a>
+                        <span class="role-separator">|</span>
+                        <span class="contribution-role">${contrib.role}</span>
+                    </span>
+                    <span class="contribution-pr">
+                        <a href="${contrib.prUrl}" target="_blank" class="pr-link"><i class="fas fa-code-branch"></i> View Merged PR</a>
+                    </span>
+                </div>
+                <ul class="contribution-bullets">
+                    ${contrib.highlights.map(bullet => `<li>${bullet}</li>`).join('')}
+                </ul>
+            </div>
+        `).join('')
+    },
     connect: {
         title: CONFIG.connect.title || "LinkLayer: Connect",
         content: `
@@ -120,6 +140,10 @@ ${CONFIG.skills.treeCol2.trim()}
                 <div class="file-item" data-action="experience">
                     <i class="fas fa-folder file-icon folder"></i>
                     <span class="file-name">experience</span>
+                </div>
+                <div class="file-item" data-action="contributions">
+                    <i class="fas fa-folder file-icon folder"></i>
+                    <span class="file-name">contributions</span>
                 </div>
                 <div class="file-item" data-action="connect">
                     <i class="fas fa-folder file-icon folder"></i>
@@ -202,7 +226,7 @@ let dockerState = {
 
 const containerCommands = ['ls', 'yum', 'exit', 'help', 'clear', 'whoami'];
 const centosFiles = ['bin/', 'etc/', 'home/', 'var/', 'usr/', 'root/', 'opt/', 'tmp/'];
-const commands = ['whoami', 'skills', 'projects', 'experience', 'connect', 'resume', 'help', 'clear', 'ls', 'files', 'theme', 'docker', 'server'];
+const commands = ['whoami', 'skills', 'projects', 'experience', 'contributions', 'connect', 'resume', 'help', 'clear', 'ls', 'files', 'theme', 'docker', 'server'];
 
 // Input Handling
 // Initial cursor state
@@ -639,6 +663,7 @@ function initFileTree(win) {
                     'skills': 'skills',
                     'projects': 'projects',
                     'experience': 'experience',
+                    'contributions': 'contributions',
                     'connect': 'connect'
                 };
                 openSection(slugMap[action] || action);
