@@ -162,6 +162,25 @@ const CONFIG = {
     ],
 
     // ==========================================
+    // Contributions Section (contributions)
+    // ==========================================
+    contributionsSectionTitle: "Changelog: Open Source Contributions",
+    contributions: [
+        {
+            project: "Serena",
+            projectUrl: "https://github.com/oraios/serena",
+            role: "CI/CD Contributor",
+            prUrl: "https://github.com/oraios/serena/pull/1421",
+            timeline: "Recent",
+            highlights: [
+                "<strong>CI/CD Optimization:</strong> Redesigned legacy GitHub Actions workflows into a Parallel Matrix, slashing execution time from 2+ hours to under 10 minutes.",
+                "<strong>Docker Automation:</strong> Automated custom Docker environment deployments to GitHub Container Registry (GHCR) for isolated testing.",
+                "<strong>Pipeline Stability:</strong> Stabilized workflows by quarantining flaky toolchains and resolving cross-fork dependency issues using dynamic variables."
+            ]
+        }
+    ],
+
+    // ==========================================
     // Contact Section (Formspree Mailer Integration)
     // ==========================================
     connect: {
