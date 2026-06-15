@@ -50,8 +50,8 @@ Allows recruiters to run mock container commands (`docker run -it centos`) insid
 *   **Isolated Filesystems:** Simulates internal directory structures (`/bin`, `/etc`, `/var`, `/opt`).
 *   **InstallerStdout Simulation:** Type `yum install nginx` or `apt install nginx` to execute complete download sequences, package validations, and setup loops mimicking real Linux installer outputs.
 
-### 🎨 3. Glassmorphic Desktop Window System
-*   **Draggable & Maximizable Windows:** Draggable desktop app containers (`about`, `skills`, `projects`, `files`, `connect`) with double-click window focus management.
+### 3. Glassmorphic Desktop Window System
+*   **Draggable & Maximizable Windows:** Draggable desktop app containers (`about`, `skills`, `projects`, `experience`, `contributions`, `files`, `connect`) with double-click window focus management.
 *   **Theme Switcher Engine:** Change background styles dynamically (Dracula Dark, Matrix Green, GitHub Dark, Tokyo Night, Midnight Black) via console commands (`theme [name]`) or the floating settings gear widget.
 
 ---
@@ -156,7 +156,7 @@ Open **`config.js`** in your editor and customize the values in the `CONFIG` obj
 *   **Terminal Details:** Change `terminalUser` and `terminalHost` to update console prefixes.
 *   **Bio/About Details:** Edit fields under `about` to reflect your name, role, learning interests, and coordinates.
 *   **Skills Tree:** Modify the `skills.treeCol1` and `skills.treeCol2` ASCII text layout columns.
-*   **Projects & Experience:** Update lists of projects and experience items. They will be formatted and rendered automatically.
+*   **Projects, Experience, & Contributions:** Update lists of projects, experience, and open-source contributions. They will be formatted and rendered automatically.
 *   **Formspree Mailer:** Set your Formspree form ID under `connect.formspreeId` to receive form submissions.
 *   **Social & Resume Links:** Update the `socials` array with your profile links and icons, and define the `resumeUrl` path.
 
