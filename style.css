@@ -517,6 +517,77 @@ nav a:hover {
     font-size: 0.95rem;
 }
 
+/* Contributions Section Styles */
+.contribution-item {
+    margin-bottom: 25px;
+}
+
+.contribution-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+.contribution-title {
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.role-separator {
+    margin: 0 8px;
+    color: #8b949e;
+}
+
+.contribution-role {
+    font-size: 0.9rem;
+    color: var(--text-color);
+    font-weight: normal;
+}
+
+.contribution-pr .pr-link {
+    font-size: 0.8rem;
+    color: var(--accent-color);
+    text-decoration: none;
+    font-family: var(--font-mono);
+    border: 1px solid rgba(88, 166, 255, 0.2);
+    padding: 3px 8px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.contribution-pr .pr-link:hover {
+    background: rgba(88, 166, 255, 0.1);
+    border-color: var(--accent-color);
+}
+
+.contribution-bullets {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.contribution-bullets li {
+    margin-bottom: 8px;
+    position: relative;
+    padding-left: 18px;
+    line-height: 1.5;
+    font-size: 0.85rem;
+    color: #c9d1d9;
+}
+
+.contribution-bullets li::before {
+    content: "›";
+    position: absolute;
+    left: 0;
+    color: var(--success-color);
+    font-weight: bold;
+}
+
 /* Contact Form Styles */
 .contact-form {
     display: flex;
