@@ -2,6 +2,13 @@
 const savedTheme = localStorage.getItem('tirth-portfolio-theme') || 'dracula';
 document.body.classList.add(`theme-${savedTheme}`);
 
+function escapeHTML(str) {
+    if (!str) return '';
+    return str.replace(/[&<>'"]/g, tag => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+    }[tag] || tag));
+}
+
 const termInput = document.getElementById('terminal-input');
 const ghostText = document.getElementById('ghost-text');
 const termHistory = document.getElementById('terminal-history');
@@ -249,6 +256,7 @@ termInput.addEventListener('keydown', (e) => {
             return;
         }
 
+        if (!val.trim()) return;
         const activeList = dockerState.active ? containerCommands : commands;
         const match = activeList.find(c => c.startsWith(val));
         if (match) {
@@ -380,16 +388,21 @@ function setTheme(name) {
 }
 
 function executeCommand(input) {
-    if (!input) return;
-
     // Add to history
     const log = document.createElement('div');
+    const safeInput = escapeHTML(input || '');
     if (dockerState.active) {
-        log.innerHTML = `<span class="docker-root-prompt">[${dockerState.user}@${dockerState.host} ${dockerState.path}]#</span> <span class="highlight">${input}</span>`;
+        log.innerHTML = `<span class="docker-root-prompt">[${dockerState.user}@${dockerState.host} ${dockerState.path}]#</span> <span class="highlight">${safeInput}</span>`;
     } else {
-        log.innerHTML = `<span class="user">${CONFIG.terminalUser}@${CONFIG.terminalHost}</span>:<span class="path">~</span>$ <span class="highlight">${input}</span>`;
+        log.innerHTML = `<span class="user">${CONFIG.terminalUser}@${CONFIG.terminalHost}</span>:<span class="path">~</span>$ <span class="highlight">${safeInput}</span>`;
     }
     termHistory.appendChild(log);
+
+    if (!input || !input.trim()) {
+        const body = document.getElementById('main-terminal-body');
+        body.scrollTop = body.scrollHeight;
+        return;
+    }
 
     // Split parameters for parsed shell execution
     const parts = input.trim().split(/\s+/);
@@ -431,9 +444,9 @@ function executeCommand(input) {
             const output = document.createElement('div');
             output.className = 'output';
             if (success) {
-                output.innerHTML = `<span class="highlight">✓ Theme environment successfully updated to: ${themeName}</span>`;
+                output.innerHTML = `<span class="highlight">✓ Theme environment successfully updated to: ${escapeHTML(themeName)}</span>`;
             } else {
-                output.innerHTML = `<span style="color: #ff5f56;">✗ Unknown theme: "${themeName}". Available themes: dracula, matrix, github, tokyonight, midnight</span>`;
+                output.innerHTML = `<span style="color: #ff5f56;">✗ Unknown theme: "${escapeHTML(themeName)}". Available themes: dracula, matrix, github, tokyonight, midnight</span>`;
             }
             termHistory.appendChild(output);
         }
@@ -447,7 +460,7 @@ function executeCommand(input) {
     } else {
         const output = document.createElement('div');
         output.className = 'output';
-        output.innerHTML = `Command not found: ${cmd}. Type 'help' for options.`;
+        output.innerHTML = `Command not found: ${escapeHTML(cmd)}. Type 'help' for options.`;
         termHistory.appendChild(output);
     }
 
@@ -526,7 +539,7 @@ Type 'yum' (CentOS) or 'apt' (Ubuntu) for packages, or 'exit' to terminate.`;
             termHistory.appendChild(output);
         }
     } else {
-        output.innerHTML = `<span style="color: #ff5f56;">✗ Unknown docker command: "${sub}". Type 'docker' for options.</span>`;
+        output.innerHTML = `<span style="color: #ff5f56;">✗ Unknown docker command: "${escapeHTML(sub)}". Type 'docker' for options.</span>`;
         termHistory.appendChild(output);
     }
 }
@@ -551,7 +564,7 @@ function handleDockerCommand(cmd, args) {
         termHistory.appendChild(output);
     } else if (cmd === 'yum' || cmd === 'apt') {
         if (args.length > 0 && args[0] === 'install') {
-            const pkg = args[1] || 'nginx';
+            const pkg = escapeHTML(args[1] || 'nginx');
             output.innerHTML = `
 Loaded plugins: fastestmirror, ovl<br>
 Determining fastest mirrors<br>
@@ -585,7 +598,7 @@ Try running: ${cmd} install nginx
         output.innerHTML = `Isolated Container Shell commands: <br>${containerCommands.join(', ')}`;
         termHistory.appendChild(output);
     } else {
-        output.innerHTML = `bash: ${cmd}: command not found. Type 'help' for options.`;
+        output.innerHTML = `bash: ${escapeHTML(cmd)}: command not found. Type 'help' for options.`;
         termHistory.appendChild(output);
     }
 }
@@ -883,8 +896,19 @@ function makeDraggable(el) {
         pos4 = clientY;
 
         if (!el.classList.contains('maximized')) {
-            el.style.top = (el.offsetTop - pos2) + "px";
-            el.style.left = (el.offsetLeft - pos1) + "px";
+            let newTop = el.offsetTop - pos2;
+            let newLeft = el.offsetLeft - pos1;
+            
+            if (newTop < 0) newTop = 0;
+            if (newLeft < 0) newLeft = 0;
+            
+            const maxLeft = window.innerWidth - 100;
+            const maxTop = window.innerHeight - 50;
+            if (newLeft > maxLeft) newLeft = maxLeft;
+            if (newTop > maxTop) newTop = maxTop;
+
+            el.style.top = newTop + "px";
+            el.style.left = newLeft + "px";
         }
     }
 
