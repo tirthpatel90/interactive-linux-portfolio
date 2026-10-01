@@ -23,7 +23,7 @@ const sections = {
         content: `
             <div class="profile-card" id="profile-card-about">
                 <div class="profile-visuals">
-                    <img src="${CONFIG.about.pfp}" onerror="this.src='${CONFIG.about.pfpFallback}'" class="profile-img-view" id="profile-avatar-img" style="position: relative; opacity: 1;">
+                    <img src="${CONFIG.about.pfp}" onerror="this.src='${CONFIG.about.pfpFallback}'" alt="${escapeHTML(CONFIG.about.name)} Profile Picture" class="profile-img-view" id="profile-avatar-img" style="position: relative; opacity: 1;">
                 </div>
                 <div class="profile-info">
                     <p class="user" style="font-size: 1.25rem; font-weight: bold; margin-bottom: 4px;">${CONFIG.about.name}</p>
@@ -54,7 +54,7 @@ ${CONFIG.skills.treeCol2.trim()}
         content: CONFIG.projects.map(proj => `
             <div class="project-item">
                 <div class="project-item-header">
-                    <a href="${proj.url}" target="_blank" class="highlight project-name">${proj.name}</a>
+                    <a href="${proj.url}" target="_blank" rel="noopener noreferrer" class="highlight project-name">${proj.name}</a>
                     <span class="project-timeline">${proj.timeline}</span>
                 </div>
                 <ul class="project-desc">
@@ -88,12 +88,12 @@ ${CONFIG.skills.treeCol2.trim()}
             <div class="contribution-item">
                 <div class="contribution-header">
                     <span class="contribution-title">
-                        <a href="${contrib.projectUrl}" target="_blank" class="highlight project-name">${contrib.project}</a>
+                        <a href="${contrib.projectUrl}" target="_blank" rel="noopener noreferrer" class="highlight project-name">${contrib.project}</a>
                         <span class="role-separator">|</span>
                         <span class="contribution-role">${contrib.role}</span>
                     </span>
                     <span class="contribution-pr">
-                        <a href="${contrib.prUrl}" target="_blank" class="pr-link"><i class="fas fa-code-branch"></i> View Merged PR</a>
+                        <a href="${contrib.prUrl}" target="_blank" rel="noopener noreferrer" class="pr-link"><i class="fas fa-code-branch"></i> View Merged PR</a>
                     </span>
                 </div>
                 <ul class="contribution-bullets">
@@ -631,6 +631,11 @@ function openSection(slug) {
     }
     win.style.zIndex = getTopZIndex() + 1;
 
+    if (window.history && window.history.replaceState) {
+        const hashSlug = slug === 'whoami' ? 'about' : slug;
+        window.history.replaceState(null, '', `#${hashSlug}`);
+    }
+
     win.innerHTML = `
         <div class="terminal-header">
             <div class="header-buttons">
@@ -944,8 +949,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const socialContainer = document.getElementById('social-links-container');
     if (socialContainer && CONFIG.socials) {
         socialContainer.innerHTML = CONFIG.socials.map(social => {
-            const targetAttr = social.url.startsWith('mailto:') ? '' : 'target="_blank"';
-            return `<a href="${social.url}" ${targetAttr} class="social-btn"><i class="${social.icon}"></i> ${social.name}</a>`;
+            const targetAttr = social.url.startsWith('mailto:') ? '' : 'target="_blank" rel="noopener noreferrer"';
+            return `<a href="${social.url}" ${targetAttr} aria-label="${escapeHTML(social.name)}" class="social-btn"><i class="${social.icon}"></i> ${social.name}</a>`;
         }).join('');
     }
 
@@ -978,6 +983,32 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // Support deep-linking and crawler hash anchors
+    function handleDeepLink() {
+        const hash = (window.location.hash || '').replace('#', '').toLowerCase();
+        if (hash) {
+            const slugMap = {
+                'about': 'whoami',
+                'whoami': 'whoami',
+                'skills': 'skills',
+                'projects': 'projects',
+                'experience': 'experience',
+                'contributions': 'contributions',
+                'connect': 'connect',
+                'contact': 'connect',
+                'files': 'files',
+                'server': 'server',
+                'wasm': 'wasm'
+            };
+            const target = slugMap[hash];
+            if (target) {
+                setTimeout(() => openSection(target), 200);
+            }
+        }
+    }
+    handleDeepLink();
+    window.addEventListener('hashchange', handleDeepLink);
 });
 
 async function runBootSequence() {
