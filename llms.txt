@@ -1,0 +1,30 @@
+# Tirth Patel - DevOps & Cloud Systems Engineer
+
+> Interactive Linux Terminal & Cloud Systems Portfolio of Tirth Patel. DevOps, Cloud Infrastructure, Docker virtual environments, CI/CD automation, and Open Source Software.
+
+- Website: https://tirthdev-portfolio.vercel.app/
+- GitHub: https://github.com/tirthpatel90
+- LinkedIn: https://www.linkedin.com/in/tirth-patel-3bbb30288
+- Email: tirthpatel5393@gmail.com
+- Location: Gujarat, India (GMT +5:30)
+- Education: LDRP Institute of Technology and Research (Information Technology)
+
+## Core Technical Skills
+- **Cloud & Infrastructure:** Amazon Web Services (AWS), Microsoft Azure, Kubernetes, Docker, Linux (Alpine, Ubuntu, Arch, CentOS), Oracle Cloud
+- **CI/CD & DevOps Automation:** GitHub Actions, cibuildwheel, Multi-Platform Matrix Builds, Containerized Diagnostics
+- **Programming & Scripting:** Python, C/C++17, JavaScript (Node.js), Shell/Bash, HTML/CSS, SQL
+- **Databases & Tools:** PostgreSQL, MySQL, SQLite, Firebase, Apache Arrow, Postman, Git
+
+## Primary Projects
+- [Zedda](https://github.com/Zedda-Labs/Zedda): High-performance Python EDA and data-cleaning library powered by a C++17 core. Designed for constant-memory profiling at terabyte scale with GitHub Actions CI/CD matrix builds and PyPI distribution.
+- [Data Agnostic MLOps Pipeline](https://github.com/tirthpatel90/Data-agnostic-MLOps-pipeline): Modular pipeline automating data ingestion, preprocessing, and training workflows across CSV, Excel, and JSON with Docker containerization.
+- [DevOps Utility Hub](https://github.com/tirthpatel90/DevOps-Utility-): Serverless client-side DevOps toolkit hosted on AWS S3 for configuration validation, secrets encoding, and infrastructure helpers.
+- [NAVIQ](https://github.com/tirthpatel90/NAVIQ): Career guidance platform built with Python, Flask, React, SQLite, and Tailwind CSS.
+- [Travel Management System](https://github.com/tirthpatel90/Travel-Management-system-): JavaScript backend web application for tours, bookings, and role-based management with SQLite and REST APIs.
+
+## Open Source Contributions
+- **NVIDIA / cuda-python (PR #2411):** Streamlined build-wheel and testing workflows on Linux and Windows for Python 3.15 compatibility; removed redundant compilation steps to natively leverage Python 3.15.
+- **Serena (PR #1421):** Refactored CI/CD GitHub Actions into a parallel matrix, reducing build times from 2+ hours to under 10 minutes; automated Docker deployments to GHCR.
+
+## Professional Experience
+- **Microsoft Azure Intern (Microsoft India × AICTE):** Cloud computing fundamentals, VMs, storage, networking, resource provisioning, and enterprise cloud architecture.
