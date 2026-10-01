@@ -1,0 +1,10 @@
+# robots.txt for https://tirthdev-portfolio.vercel.app/
+User-agent: *
+Allow: /
+
+# GEO & LLM standard documentation
+# AI engines (Perplexity, ChatGPT, Claude, Gemini) can parse:
+# https://tirthdev-portfolio.vercel.app/llms.txt
+
+# Sitemap location
+Sitemap: https://tirthdev-portfolio.vercel.app/sitemap.xml
